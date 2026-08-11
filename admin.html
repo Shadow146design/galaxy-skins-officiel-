@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel admin — Galaxy Sinks™</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#05060f">
+<link rel="icon" type="image/png" href="/gs-logo.png">
+<link rel="apple-touch-icon" href="/gs-logo.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="interactions.css">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+<div class="live-banner" id="liveBanner"><span class="live-banner-dot"></span><span id="liveBannerText"></span></div>
+
+<header class="topbar" id="topbar">
+  <a class="brand" href="/">
+    <span class="brand-mark">
+      <img src="/gs-logo.png" alt="Galaxy Sinks" width="30" height="30">
+    </span>
+    <span class="brand-text">GALAXY SINKS<sup>™</sup></span>
+  </a>
+  <div class="nav-auth">
+    <a class="btn btn-ghost" href="/#top">← Retour au site</a>
+  </div>
+</header>
+
+<main>
+  <section class="admin-hero">
+    <p class="eyebrow">Réservé au staff</p>
+    <h1 class="section-title">Panel admin</h1>
+  </section>
+
+  <div id="adminDenied" class="admin-denied hidden">
+    <p>Accès réservé aux comptes admin. <a href="/">Retour à l'accueil</a>.</p>
+  </div>
+
+  <div id="adminContent" class="admin-content hidden">
+
+    <!-- ============ BANDEAU MATCH EN COURS ============ -->
+    <section class="admin-panel">
+      <h2 class="admin-panel-title">Bandeau « match en cours »</h2>
+      <form id="liveMatchForm" class="admin-form">
+        <label class="admin-checkbox">
+          <input type="checkbox" name="isLive" id="liveMatchIsLive">
+          Bandeau actif (visible sur tout le site)
+        </label>
+        <label>Adversaire
+          <input type="text" name="opponent" id="liveMatchOpponent" placeholder="ex : Team Adverse">
+        </label>
+        <label>Lien du stream
+          <input type="url" name="streamUrl" id="liveMatchStreamUrl" placeholder="https://twitch.tv/...">
+        </label>
+        <label>Note
+          <input type="text" name="note" id="liveMatchNote" placeholder="ex : BO5, demi-finale">
+        </label>
+        <p class="form-error" id="liveMatchError"></p>
+        <button type="submit" class="btn btn-solid">Mettre à jour le bandeau</button>
+      </form>
+    </section>
+
+    <!-- ============ MODÉRATION DES CLIPS ============ -->
+    <section class="admin-panel">
+      <h2 class="admin-panel-title">Modération des clips</h2>
+      <div id="adminClipsList" class="admin-clips-list">
+        <p class="admin-empty">Chargement…</p>
+      </div>
+    </section>
+
+    <!-- ============ VÉRIFICATION DES RÔLES ============ -->
+    <section class="admin-panel">
+      <h2 class="admin-panel-title">Vérification des rôles des membres</h2>
+      <p class="admin-panel-sub">Confirme que le rôle en jeu déclaré par chaque membre correspond bien à la réalité de l'équipe.</p>
+      <div id="adminRolesList" class="admin-roles-list">
+        <p class="admin-empty">Chargement…</p>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <span class="brand-text small">GALAXY SINKS<sup>™</sup></span>
+  <p>© 2026 Galaxy Sinks™ — Tous droits réservés.</p>
+</footer>
+
+<script src="common.js"></script>
+<script src="interactions.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

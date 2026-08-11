@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compétition — Galaxy Sinks™</title>
+<meta name="description" content="Calendrier des événements et historique des matchs Galaxy Sinks™.">
+<meta name="theme-color" content="#05060f">
+<link rel="icon" type="image/png" href="/gs-logo.png">
+<link rel="apple-touch-icon" href="/gs-logo.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="interactions.css">
+<link rel="stylesheet" href="competition.css">
+</head>
+<body class="match-body">
+
+<canvas id="starfield"></canvas>
+<div class="live-banner" id="liveBanner"><span class="live-banner-dot"></span><span id="liveBannerText"></span></div>
+
+<header class="topbar" id="topbar">
+  <a class='brand' href='/'>
+    <span class="brand-mark">
+      <img src="/gs-logo.png" alt="Galaxy Sinks" width="30" height="30">
+    </span>
+    <span class="brand-text">GALAXY SINKS<sup>™</sup></span>
+  </a>
+
+  <nav class="nav" id="mainNav">
+    <a href='/#histoire'>Histoire</a>
+    <a href='/roster'>Roster</a>
+    <a class='active' href='/competition'>Compétition</a>
+    <a href='/#classement'>Classement</a>
+    <a href='/boutique'>Boutique</a>
+    <a href='/clips'>Clips</a>
+    <a class='nav-highlight' href='/rejoindre'>Candidater</a>
+    <a href='/#contact'>Contact</a>
+  </nav>
+
+  <div class="nav-auth">
+    <a class='btn btn-ghost' href='/#top'>← Retour au site</a>
+  </div>
+
+  <button class="nav-burger" id="navBurger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<main>
+  <section class="match-hero">
+    <p class="match-eyebrow">Centre de match</p>
+    <h1 class="match-title">COMPÉTITION</h1>
+    <p class="match-sub">Le calendrier, la forme du moment et les derniers résultats officiels.</p>
+  </section>
+
+  <section class="match-dashboard">
+
+    <div class="scoreboard-panel">
+      <div class="scoreboard-top">
+        <span class="scoreboard-label">● Prochain événement</span>
+        <span class="scoreboard-event" id="countdownEvent">Chargement…</span>
+      </div>
+      <div class="led-clock" id="countdownTimer"></div>
+    </div>
+
+    <div class="stats-strip" id="statsStrip"></div>
+
+    <div class="form-ticker-wrap">
+      <span class="form-ticker-label">Forme (5 derniers)</span>
+      <div class="form-ticker" id="formTicker"></div>
+    </div>
+
+    <div class="match-columns">
+      <div class="match-col">
+        <h2 class="match-col-title">Prochains matchs</h2>
+        <div class="schedule-list" id="scheduleList"></div>
+      </div>
+      <div class="match-col">
+        <h2 class="match-col-title">Résultats récents</h2>
+        <div class="results-list" id="resultsList"></div>
+      </div>
+    </div>
+
+    <p class="admin-note">Calendrier et résultats gérés par le staff — voir <code>competition.js</code> pour les modifier, ou <code>/admin.html</code> pour le bandeau "match en cours".</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span class="brand-text small">GALAXY SINKS<sup>™</sup></span>
+  <p>© 2026 Galaxy Sinks™ — Tous droits réservés.</p>
+  <p class="footer-legal">Responsable : INSANE · SIREN en cours · galaxy.sinks8@gmail.com</p>
+</footer>
+
+<script src="common.js"></script>
+<script src="interactions.js"></script>
+<script src="audio.js"></script>
+<script src="competition.js"></script>
+</body>
+</html>

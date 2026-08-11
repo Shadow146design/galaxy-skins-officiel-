@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roster — Galaxy Sinks™</title>
+<meta name="description" content="Le roster Galaxy Sinks™ : les membres inscrits, leur rôle en jeu et leur rang Rocket League.">
+<meta name="theme-color" content="#05060f">
+<link rel="icon" type="image/png" href="/gs-logo.png">
+<link rel="apple-touch-icon" href="/gs-logo.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="interactions.css">
+<link rel="stylesheet" href="roster.css">
+</head>
+<body class="roster-body">
+
+<canvas id="starfield"></canvas>
+<div class="live-banner" id="liveBanner"><span class="live-banner-dot"></span><span id="liveBannerText"></span></div>
+
+<header class="topbar" id="topbar">
+  <a class='brand' href='/'>
+    <span class="brand-mark">
+      <img src="/gs-logo.png" alt="Galaxy Sinks" width="30" height="30">
+    </span>
+    <span class="brand-text">GALAXY SINKS<sup>™</sup></span>
+  </a>
+
+  <nav class="nav" id="mainNav">
+    <a href='/#histoire'>Histoire</a>
+    <a class='active' href='/roster'>Roster</a>
+    <a href='/competition'>Compétition</a>
+    <a href='/#classement'>Classement</a>
+    <a href='/boutique'>Boutique</a>
+    <a href='/clips'>Clips</a>
+    <a class='nav-highlight' href='/rejoindre'>Candidater</a>
+    <a href='/#contact'>Contact</a>
+  </nav>
+
+  <div class="nav-auth">
+    <a class='btn btn-ghost' href='/#top'>← Retour au site</a>
+  </div>
+
+  <button class="nav-burger" id="navBurger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<main>
+  <section class="roster-hero">
+    <p class="roster-eyebrow">Ordre de bataille</p>
+    <h1 class="roster-title">LE ROSTER</h1>
+    <p class="roster-sub">Cinq divisions, un seul crew. Sélectionne une division pour voir sa composition.</p>
+  </section>
+
+  <section class="roster-board">
+    <div class="roster-board-layout">
+      <nav class="division-nav" id="divisionNav" aria-label="Divisions"></nav>
+
+      <div class="division-showcase" id="divisionShowcase">
+        <div class="showcase-glow" id="showcaseGlow" aria-hidden="true"></div>
+        <div class="showcase-content" id="showcaseContent"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="roster-members-section">
+    <h2 class="roster-members-title">Membres inscrits &amp; classement</h2>
+    <p class="roster-members-sub">
+      En plus des divisions ci-dessus, voici les membres inscrits sur le site — chacun définit
+      son rôle en jeu depuis son profil, cette liste reflète donc directement le classement.
+    </p>
+    <div class="roster-search">
+      <svg viewBox="0 0 24 24" class="roster-search-icon"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <input type="text" id="memberSearchInput" placeholder="Rechercher un membre par pseudo…" autocomplete="off">
+    </div>
+    <div class="member-table" id="memberTable">
+      <div class="member-table-head">
+        <span>#</span><span>Membre</span><span>Rôle</span><span>Rang</span><span></span>
+      </div>
+      <div class="member-table-body" id="memberTableBody">
+        <div class="roster-empty">Chargement…</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span class="brand-text small">GALAXY SINKS<sup>™</sup></span>
+  <p>© 2026 Galaxy Sinks™ — Tous droits réservés.</p>
+  <p class="footer-legal">Responsable : INSANE · SIREN en cours · galaxy.sinks8@gmail.com</p>
+</footer>
+
+<script src="common.js"></script>
+<script src="interactions.js"></script>
+<script src="audio.js"></script>
+<script src="roster.js"></script>
+</body>
+</html>

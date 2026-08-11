@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page introuvable — Galaxy Sinks™</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#05060f">
+<link rel="icon" type="image/png" href="/gs-logo.png">
+<link rel="apple-touch-icon" href="/gs-logo.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="interactions.css">
+<style>
+  .notfound-hero {
+    min-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 100px 20px 60px;
+  }
+  .notfound-code {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(72px, 16vw, 160px);
+    line-height: 1;
+    letter-spacing: 4px;
+    margin: 0;
+    background: linear-gradient(135deg, #fff 20%, var(--cyan) 55%, var(--nebula) 90%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 60px rgba(140, 107, 255, .35);
+  }
+  .notfound-title {
+    font-family: var(--font-display);
+    font-size: clamp(18px, 3vw, 24px);
+    margin: 10px 0 12px;
+  }
+  .notfound-sub {
+    max-width: 460px;
+    color: var(--text-muted);
+    font-size: 15px;
+    margin: 0 0 34px;
+  }
+  .notfound-actions { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+</style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+
+<header class="topbar" id="topbar">
+  <a class="brand" href="/">
+    <span class="brand-mark">
+      <img src="/gs-logo.png" alt="Galaxy Sinks" width="30" height="30">
+    </span>
+    <span class="brand-text">GALAXY SINKS<sup>™</sup></span>
+  </a>
+</header>
+
+<main>
+  <section class="notfound-hero">
+    <p class="hero-eyebrow">Erreur 404</p>
+    <h1 class="notfound-code">404</h1>
+    <h2 class="notfound-title">Cette page a dérivé hors de la galaxie</h2>
+    <p class="notfound-sub">Le lien est cassé ou la page n'existe plus. Retourne à l'accueil pour reprendre ta trajectoire.</p>
+    <div class="notfound-actions">
+      <a href="/" class="btn btn-solid btn-lg">Retour à l'accueil</a>
+      <a href="/#contact" class="btn btn-ghost btn-lg">Nous contacter</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span class="brand-text small">GALAXY SINKS<sup>™</sup></span>
+  <p>© 2026 Galaxy Sinks™ — Tous droits réservés.</p>
+</footer>
+
+<script src="common.js"></script>
+<script src="interactions.js"></script>
+</body>
+</html>

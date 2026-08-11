@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rejoindre — Galaxy Sinks™</title>
+<meta name="description" content="Candidate pour rejoindre le crew Galaxy Sinks™ sur Rocket League.">
+<meta name="theme-color" content="#05060f">
+<link rel="icon" type="image/png" href="/gs-logo.png">
+<link rel="apple-touch-icon" href="/gs-logo.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="pages.css">
+<link rel="stylesheet" href="interactions.css">
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+<div class="live-banner" id="liveBanner"><span class="live-banner-dot"></span><span id="liveBannerText"></span></div>
+
+<header class="topbar" id="topbar">
+  <a class='brand' href='/'>
+    <span class="brand-mark">
+      <img src="/gs-logo.png" alt="Galaxy Sinks" width="30" height="30">
+    </span>
+    <span class="brand-text">GALAXY SINKS<sup>™</sup></span>
+  </a>
+
+  <nav class="nav" id="mainNav">
+    <a href='/#histoire'>Histoire</a>
+    <a href='/roster'>Roster</a>
+    <a href='/competition'>Compétition</a>
+    <a href='/#classement'>Classement</a>
+    <a href='/boutique'>Boutique</a>
+    <a href='/clips'>Clips</a>
+    <a class='nav-highlight active' href='/rejoindre'>Candidater</a>
+    <a href='/#contact'>Contact</a>
+  </nav>
+
+  <div class="nav-auth">
+    <a class='btn btn-ghost' href='/#top'>← Retour au site</a>
+  </div>
+
+  <button class="nav-burger" id="navBurger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<main>
+  <section class="page-hero">
+    <p class="eyebrow">Recrutement</p>
+    <h1 class="page-hero-title">Rejoindre le crew</h1>
+    <p class="page-hero-sub">Envoie ta candidature, le staff la lit et revient vers toi sur Discord.</p>
+  </section>
+
+  <section class="page-section">
+    <div class="apply-layout">
+      <form class="apply-form" id="applyForm">
+        <label>Pseudo
+          <input type="text" name="pseudo" required maxlength="40">
+        </label>
+        <label>Pseudo Epic Games (Rocket League)
+          <input type="text" name="epicUsername" placeholder="ex : Sagesse-_-" required maxlength="40">
+        </label>
+        <label>Rang actuel
+          <select name="rankKey" id="applyRankSelect"></select>
+        </label>
+        <label>Disponibilités
+          <input type="text" name="availability" placeholder="ex : Soirs en semaine, week-ends" required maxlength="200">
+        </label>
+        <label>Pourquoi rejoindre Galaxy Sinks™ ? <span style="opacity:.6">(optionnel)</span>
+          <textarea name="message" rows="4" maxlength="600" placeholder="Quelques mots sur toi, ton expérience, ce que tu cherches..."></textarea>
+        </label>
+        <p class="form-error" id="applyError"></p>
+        <button type="submit" class="btn btn-solid btn-block">Envoyer ma candidature</button>
+
+        <div class="apply-success" id="applySuccess">
+          <svg viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>
+          <h3>Candidature envoyée !</h3>
+          <p class="page-hero-sub">Le staff va la lire. Tu peux aussi rejoindre le Discord dès maintenant pour te présenter.</p>
+          <a href="https://discord.gg/qdvY4hEHqT" target="_blank" rel="noopener" class="btn btn-ghost">Rejoindre le Discord</a>
+        </div>
+      </form>
+
+      <div class="apply-checklist">
+        <div class="accordion-item open">
+          <button class="accordion-trigger">
+            <span class="accordion-num">01</span>
+            <span class="accordion-title">Envoie ta candidature</span>
+            <svg viewBox="0 0 24 24" class="accordion-chevron"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="accordion-body" style="max-height:200px">
+            <div class="accordion-body-inner">Pseudo, rang, disponibilités — deux minutes suffisent, via le formulaire à gauche.</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            <span class="accordion-num">02</span>
+            <span class="accordion-title">Le staff la consulte</span>
+            <svg viewBox="0 0 24 24" class="accordion-chevron"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">INSANE et l'équipe staff regardent chaque candidature avant de revenir vers toi.</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            <span class="accordion-num">03</span>
+            <span class="accordion-title">Un échange sur Discord</span>
+            <svg viewBox="0 0 24 24" class="accordion-chevron"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">Direction le serveur Discord pour se rencontrer et valider ton arrivée dans le crew.</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            <span class="accordion-num">04</span>
+            <span class="accordion-title">Bienvenue chez Galaxy Sinks™</span>
+            <svg viewBox="0 0 24 24" class="accordion-chevron"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">Crée ton compte sur le site pour apparaître au classement, avec ton rang à jour.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span class="brand-text small">GALAXY SINKS<sup>™</sup></span>
+  <p>© 2026 Galaxy Sinks™ — Tous droits réservés.</p>
+  <p class="footer-legal">Responsable : INSANE · SIREN en cours · galaxy.sinks8@gmail.com</p>
+</footer>
+
+<script src="common.js"></script>
+<script src="interactions.js"></script>
+<script src="audio.js"></script>
+<script src="rejoindre.js"></script>
+</body>
+</html>

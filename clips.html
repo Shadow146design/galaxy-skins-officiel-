@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clips — Galaxy Sinks™</title>
+<meta name="description" content="Meilleurs moments et reprises vidéo Galaxy Sinks™.">
+<meta name="theme-color" content="#05060f">
+<link rel="icon" type="image/png" href="/gs-logo.png">
+<link rel="apple-touch-icon" href="/gs-logo.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="interactions.css">
+<link rel="stylesheet" href="clips.css">
+</head>
+<body class="replay-body">
+
+<canvas id="starfield"></canvas>
+<div class="live-banner" id="liveBanner"><span class="live-banner-dot"></span><span id="liveBannerText"></span></div>
+
+<header class="topbar" id="topbar">
+  <a class='brand' href='/'>
+    <span class="brand-mark">
+      <img src="/gs-logo.png" alt="Galaxy Sinks" width="30" height="30">
+    </span>
+    <span class="brand-text">GALAXY SINKS<sup>™</sup></span>
+  </a>
+
+  <nav class="nav" id="mainNav">
+    <a href='/#histoire'>Histoire</a>
+    <a href='/roster'>Roster</a>
+    <a href='/competition'>Compétition</a>
+    <a href='/#classement'>Classement</a>
+    <a href='/boutique'>Boutique</a>
+    <a class='active' href='/clips'>Clips</a>
+    <a class='nav-highlight' href='/rejoindre'>Candidater</a>
+    <a href='/#contact'>Contact</a>
+  </nav>
+
+  <div class="nav-auth">
+    <a class='btn btn-ghost' href='/#top'>← Retour au site</a>
+  </div>
+
+  <button class="nav-burger" id="navBurger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<main>
+  <section class="replay-hero">
+    <div class="replay-hero-scan" aria-hidden="true"></div>
+    <p class="replay-eyebrow">📼 Pôle vidéo — Galaxy Sinks™</p>
+    <h1 class="replay-title">CLIPS <span>&amp; REPRISES</span></h1>
+    <p class="replay-sub">Les meilleurs moments filmés par INSANE et Nagzag, ajoutés au fil des matchs.</p>
+  </section>
+
+  <section class="replay-section">
+    <div class="replay-stage">
+      <div class="replay-frame">
+        <span class="replay-live-badge"><span class="dot"></span>REPLAY</span>
+        <span class="replay-counter" id="replayCounter">01 / 01</span>
+        <video id="featuredVideo" controls playsinline preload="metadata"></video>
+        <div class="replay-scanlines" aria-hidden="true"></div>
+        <div class="replay-vignette" aria-hidden="true"></div>
+      </div>
+      <div class="replay-meta">
+        <h2 id="featuredTitle">—</h2>
+        <p id="featuredDesc">—</p>
+      </div>
+    </div>
+
+    <div class="filmstrip-wrap">
+      <div class="carousel filmstrip">
+        <div class="carousel-nav">
+          <button class="carousel-nav-btn carousel-prev" aria-label="Précédent">
+            <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+          </button>
+          <button class="carousel-nav-btn carousel-next" aria-label="Suivant">
+            <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+        <div class="carousel-track filmstrip-track" id="filmstripTrack"></div>
+      </div>
+    </div>
+
+    <div class="replay-empty" id="replayEmpty" style="display:none">
+      Aucun clip pour le moment — les reprises vidéo de chaque but arriveront ici au fil des matchs.
+    </div>
+  </section>
+
+  <!-- ============ SOUMETTRE UN CLIP ============ -->
+  <section class="submit-clip-section">
+    <p class="eyebrow">Ton clip ici ?</p>
+    <h2 class="section-title">Soumets ton meilleur moment</h2>
+    <p class="section-intro">
+      Vidéo très courte (quelques secondes, 4 Mo maximum — limite technique de l'hébergement).
+      Un membre du staff valide chaque clip avant qu'il apparaisse publiquement ci-dessus.
+    </p>
+
+    <div id="submitClipLoggedOut" class="submit-clip-loggedout">
+      <a class="btn btn-solid" href="/#top">Connecte-toi depuis l'accueil pour soumettre un clip</a>
+    </div>
+
+    <form id="submitClipForm" class="submit-clip-form hidden">
+      <label>Titre
+        <input type="text" name="title" maxlength="80" required placeholder="ex : Aerial nocturne">
+      </label>
+      <label>Description (optionnel)
+        <textarea name="desc" maxlength="300" rows="2" placeholder="Contexte du clip, score, adversaire…"></textarea>
+      </label>
+      <label>Fichier vidéo (MP4, WebM ou MOV — 4 Mo max)
+        <input type="file" name="video" accept="video/mp4,video/webm,video/quicktime" required>
+      </label>
+      <p class="form-error" id="submitClipError"></p>
+      <p class="form-hint" id="submitClipStatus"></p>
+      <button type="submit" class="btn btn-solid btn-block" id="submitClipBtn">Envoyer pour validation</button>
+    </form>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span class="brand-text small">GALAXY SINKS<sup>™</sup></span>
+  <p>© 2026 Galaxy Sinks™ — Tous droits réservés.</p>
+  <p class="footer-legal">Responsable : INSANE · SIREN en cours · galaxy.sinks8@gmail.com</p>
+</footer>
+
+<script src="common.js"></script>
+<script src="interactions.js"></script>
+<script src="audio.js"></script>
+<script src="clips.js"></script>
+</body>
+</html>

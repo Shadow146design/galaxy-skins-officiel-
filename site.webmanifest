@@ -1,0 +1,15 @@
+{
+  "name": "Galaxy Sinks™ — Rocket League Esport",
+  "short_name": "Galaxy Sinks",
+  "description": "Galaxy Sinks™ — équipe et communauté Rocket League. Classement, actualités, staff et matchs.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#05060f",
+  "theme_color": "#05060f",
+  "lang": "fr",
+  "icons": [
+    { "src": "/gs-logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/gs-logo.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

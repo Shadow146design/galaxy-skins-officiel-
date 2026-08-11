@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boutique — Galaxy Sinks™</title>
+<meta name="description" content="Boutique officielle Galaxy Sinks™ — vêtements, accessoires et goodies gaming.">
+<meta name="theme-color" content="#05060f">
+<link rel="icon" type="image/png" href="/gs-logo.png">
+<link rel="apple-touch-icon" href="/gs-logo.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="boutique.css">
+<link rel="stylesheet" href="interactions.css">
+</head>
+<body class="shop-body">
+
+<canvas id="starfield"></canvas>
+<div class="blackhole-bg" aria-hidden="true"></div>
+<div class="live-banner" id="liveBanner"><span class="live-banner-dot"></span><span id="liveBannerText"></span></div>
+
+<!-- ============ NAV ============ -->
+<header class="topbar" id="topbar">
+  <a class='brand' href='/'>
+    <span class="brand-mark">
+      <img src="/gs-logo.png" alt="Galaxy Sinks" width="30" height="30">
+    </span>
+    <span class="brand-text">GALAXY SINKS<sup>™</sup></span>
+  </a>
+
+  <nav class="nav" id="mainNav">
+    <a href='/#histoire'>Histoire</a>
+    <a href='/roster'>Roster</a>
+    <a href='/competition'>Compétition</a>
+    <a href='/#classement'>Classement</a>
+    <a class='active' href='/boutique'>Boutique</a>
+    <a href='/clips'>Clips</a>
+    <a class='nav-highlight' href='/rejoindre'>Candidater</a>
+    <a href='/#contact'>Contact</a>
+  </nav>
+
+  <div class="nav-auth">
+    <button class="btn btn-ghost cart-toggle" id="cartToggle">
+      <svg viewBox="0 0 24 24" class="cart-icon"><path d="M6 6h15l-1.5 9h-12z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="9" cy="19" r="1.4"/><circle cx="17" cy="19" r="1.4"/><path d="M3 3h2l1 3" stroke="currentColor" stroke-width="1.6" fill="none"/></svg>
+      Panier <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+
+  <button class="nav-burger" id="navBurger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<main>
+
+  <!-- ============ SHOP HERO ============ -->
+  <section class="shop-hero">
+    <span class="shop-drop-tag">Drop 01 · Édition Renaissance</span>
+    <h1 class="shop-hero-title">LA BOUTIQUE<br>GALAXY SINKS<sup>™</sup></h1>
+    <p class="shop-hero-sub">Vêtements et goodies portés par le crew. Séries limitées, expédition sous 5 à 8 jours, commande directe via Discord.</p>
+  </section>
+
+  <!-- ============ VITRINE VEDETTE (carte holo interactive) ============ -->
+  <section class="featured-section">
+    <div class="featured-spotlight" id="featuredSpotlight"></div>
+  </section>
+
+  <!-- ============ FILTERS ============ -->
+  <section class="shop-toolbar">
+    <div class="shop-filters" id="shopFilters">
+      <button class="filter-chip active" data-filter="all">Tout</button>
+      <button class="filter-chip" data-filter="vetements">Vêtements</button>
+      <button class="filter-chip" data-filter="accessoires">Accessoires</button>
+      <button class="filter-chip" data-filter="gaming">Gaming</button>
+    </div>
+    <div class="rarity-legend">
+      <span><i style="background:#c7cbd8"></i>Commune</span>
+      <span><i style="background:#3fe0ff"></i>Rare</span>
+      <span><i style="background:#8c6bff"></i>Épique</span>
+      <span><i style="background:#ffcf5c"></i>Légendaire</span>
+    </div>
+    <div class="shop-count" id="shopCount"></div>
+  </section>
+
+  <!-- ============ PRODUCT GRID ============ -->
+  <section class="shop-grid" id="shopGrid"></section>
+
+  <!-- ============ TRUST STRIP ============ -->
+  <section class="trust-strip">
+    <div class="trust-item"><strong>Séries limitées</strong><span>Stock volontairement restreint à chaque drop</span></div>
+    <div class="trust-item"><strong>Commande via Discord</strong><span>Pas de paiement en ligne pour l'instant — on gère ça ensemble</span></div>
+    <div class="trust-item"><strong>Fait pour le crew</strong><span>Designs pensés par Shadow, validés par la communauté</span></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <span class="brand-text small">GALAXY SINKS<sup>™</sup></span>
+  <p>© 2026 Galaxy Sinks™ — Tous droits réservés.</p>
+  <p class="footer-legal">Responsable : INSANE · SIREN en cours · galaxy.sinks8@gmail.com</p>
+</footer>
+
+<!-- ============ PRODUCT QUICK VIEW ============ -->
+<div class="modal-overlay" id="quickViewOverlay">
+  <div class="modal quick-view" id="quickViewModal">
+    <button class="modal-close" id="quickViewClose" aria-label="Fermer">✕</button>
+    <div class="qv-visual" id="qvVisual"></div>
+    <div class="qv-body">
+      <span class="qv-category" id="qvCategory"></span>
+      <h3 id="qvName"></h3>
+      <p class="qv-desc" id="qvDesc"></p>
+      <div class="qv-price" id="qvPrice"></div>
+      <div class="qv-sizes" id="qvSizes"></div>
+      <button class="btn btn-solid btn-block" id="qvAddBtn">Ajouter au panier</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ CART DRAWER ============ -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer">
+  <div class="cart-drawer-head">
+    <h3>Mon panier</h3>
+    <button class="modal-close" id="cartClose" aria-label="Fermer">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="cart-subtotal">
+      <span>Sous-total</span>
+      <strong id="cartSubtotal">0,00 €</strong>
+    </div>
+    <button class="btn btn-solid btn-block" id="checkoutBtn">Commander via Discord</button>
+    <p class="cart-note">Aucun paiement n'est effectué sur le site. Ta commande est récapitulée et envoyée en message pré-rempli au staff sur Discord.</p>
+  </div>
+</aside>
+
+<script src="common.js"></script>
+<script src="interactions.js"></script>
+<script src="audio.js"></script>
+<script src="boutique.js"></script>
+</body>
+</html>

@@ -1,0 +1,232 @@
+/* =========================================================
+   Galaxy Sinks™ — clips.css
+   Identité visuelle volontairement différente du reste du site :
+   esprit "régie de diffusion esport" — noir quasi total, accent
+   rouge broadcast, scanlines, pellicule 35mm pour les miniatures.
+   Remplace pages.css sur cette page (pas de dépendance croisée).
+   ========================================================= */
+
+:root {
+  --replay-red: #ff2f4e;
+  --replay-red-dim: #7a1220;
+}
+
+.replay-body { background: #030304; }
+
+/* ================= HERO ================= */
+
+.replay-hero {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 90px 24px 40px;
+  text-align: center;
+  overflow: hidden;
+}
+.replay-hero-scan {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255, 47, 78, 0.035) 0px,
+    rgba(255, 47, 78, 0.035) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+}
+.replay-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--replay-red);
+  margin: 0 0 14px;
+}
+.replay-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(32px, 6.5vw, 54px);
+  letter-spacing: 1px;
+  margin: 0 0 16px;
+  color: #fff;
+  text-shadow: 0 0 30px rgba(255, 47, 78, .35);
+}
+.replay-title span { color: var(--replay-red); }
+.replay-sub { color: var(--text-muted); font-size: 15px; max-width: 520px; margin: 0 auto; }
+
+/* ================= STAGE (lecteur principal) ================= */
+
+.replay-section {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 10px 24px 100px;
+}
+.replay-stage { margin-bottom: 30px; }
+.replay-frame {
+  position: relative;
+  background: #000;
+  border: 1px solid rgba(255, 47, 78, .35);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.6), 0 30px 70px -30px rgba(255, 47, 78, .35);
+  aspect-ratio: 16 / 9;
+}
+.replay-frame video {
+  width: 100%; height: 100%;
+  display: block;
+  background: #000;
+}
+.replay-live-badge {
+  position: absolute;
+  top: 14px; left: 14px;
+  z-index: 3;
+  display: flex; align-items: center; gap: 7px;
+  background: rgba(0,0,0,.65);
+  border: 1px solid var(--replay-red);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 5px 11px 5px 9px;
+  border-radius: 999px;
+  pointer-events: none;
+}
+.replay-live-badge .dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--replay-red);
+  animation: replayBlink 1.2s ease-in-out infinite;
+}
+@keyframes replayBlink { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+
+.replay-counter {
+  position: absolute;
+  top: 14px; right: 14px;
+  z-index: 3;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: rgba(255,255,255,.7);
+  background: rgba(0,0,0,.55);
+  padding: 5px 10px;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.replay-scanlines {
+  position: absolute; inset: 0;
+  z-index: 2;
+  background: repeating-linear-gradient(
+    0deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px,
+    transparent 1px, transparent 3px
+  );
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+.replay-vignette {
+  position: absolute; inset: 0;
+  z-index: 2;
+  box-shadow: inset 0 0 120px 40px rgba(0,0,0,.65);
+  pointer-events: none;
+}
+
+.replay-meta { padding: 20px 4px 0; }
+.replay-meta h2 { font-family: var(--font-display); font-size: 20px; color: #fff; margin: 0 0 8px; }
+.replay-meta p { color: var(--text-muted); font-size: 14px; margin: 0; }
+
+/* ================= FILMSTRIP (pellicule) ================= */
+
+.filmstrip-wrap { margin-top: 30px; }
+.filmstrip .carousel-nav-btn:hover { border-color: var(--replay-red); color: var(--replay-red); }
+
+.filmstrip-track { gap: 16px; padding: 10px 2px 14px; }
+
+.film-card {
+  position: relative;
+  width: 220px;
+  cursor: pointer;
+  background: #0a0a0c;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 6px;
+  padding: 10px 10px 12px;
+  transition: border-color .25s ease, transform .25s ease;
+}
+.film-card:hover { transform: translateY(-4px); border-color: rgba(255, 47, 78, .5); }
+.film-card.active { border-color: var(--replay-red); box-shadow: 0 0 0 1px var(--replay-red), 0 10px 26px -12px rgba(255,47,78,.6); }
+
+.film-sprockets {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2px 6px;
+}
+.film-sprockets span {
+  width: 6px; height: 6px;
+  border-radius: 1px;
+  background: rgba(255,255,255,.15);
+}
+
+.film-thumb {
+  position: relative;
+  aspect-ratio: 16/9;
+  border-radius: 3px;
+  overflow: hidden;
+  background: #111;
+  clip-path: polygon(0 6px, 6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+}
+.film-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.film-play {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,.25);
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+.film-card:hover .film-play, .film-card.active .film-play { opacity: 1; }
+.film-play svg { width: 34px; height: 34px; fill: #fff; filter: drop-shadow(0 0 8px rgba(255,47,78,.7)); }
+
+.film-title { font-size: 12.5px; font-weight: 700; color: #fff; margin-top: 8px; }
+.film-duration { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-muted); margin-top: 2px; }
+
+.replay-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+  border: 1px dashed rgba(255,255,255,.15);
+  border-radius: 16px;
+}
+
+@media (max-width: 640px) {
+  .replay-frame { border-radius: 4px; }
+  .film-card { width: 170px; }
+}
+
+/* ================= SOUMETTRE UN CLIP ================= */
+
+.submit-clip-section {
+  max-width: 640px;
+  margin: 60px auto 100px;
+  padding: 0 24px;
+}
+.submit-clip-loggedout { text-align: center; padding: 24px 0; }
+.submit-clip-form {
+  background: linear-gradient(160deg, var(--panel), var(--panel-2));
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.submit-clip-form label { font-size: 12.5px; color: var(--text-muted); display: flex; flex-direction: column; gap: 6px; }
+.submit-clip-form input, .submit-clip-form textarea {
+  background: var(--void);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: var(--text);
+  font-size: 14px;
+  font-family: var(--font-body);
+  resize: vertical;
+}
+.submit-clip-form .form-hint { color: var(--cyan); font-size: 12.5px; }

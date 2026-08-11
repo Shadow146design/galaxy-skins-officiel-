@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Membre du staff — Galaxy Sinks™</title>
+<meta name="theme-color" content="#05060f">
+<link rel="icon" type="image/png" href="/gs-logo.png">
+<link rel="apple-touch-icon" href="/gs-logo.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="interactions.css">
+<link rel="stylesheet" href="membre.css">
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+<div class="live-banner" id="liveBanner"><span class="live-banner-dot"></span><span id="liveBannerText"></span></div>
+
+<header class="topbar" id="topbar">
+  <a class='brand' href='/'>
+    <span class="brand-mark">
+      <img src="/gs-logo.png" alt="Galaxy Sinks" width="30" height="30">
+    </span>
+    <span class="brand-text">GALAXY SINKS<sup>™</sup></span>
+  </a>
+  <div class="nav-auth">
+    <a class='btn btn-ghost' href='/#staff'>← Retour au staff</a>
+  </div>
+</header>
+
+<main id="memberMain" style="display:none">
+
+  <section class="member-hero">
+    <div class="member-hero-avatar" id="memberAvatar"></div>
+    <span class="member-hero-tier" id="memberTier"></span>
+    <h1 id="memberName"></h1>
+    <p class="member-hero-role" id="memberRole"></p>
+    <p class="member-hero-tagline" id="memberTagline"></p>
+    <div class="member-hero-links" id="memberLinks"></div>
+  </section>
+
+  <section class="page-section member-tabs-section">
+    <div class="tabs">
+      <div class="tabs-nav">
+        <button class="tab-btn active" data-tab="bio">Bio</button>
+        <button class="tab-btn" data-tab="rl">Infos Rocket League</button>
+      </div>
+
+      <div class="tab-panel active" data-tab-panel="bio">
+        <div class="carousel bio-carousel">
+          <div class="carousel-nav">
+            <button class="carousel-nav-btn carousel-prev" aria-label="Précédent">
+              <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+            </button>
+            <button class="carousel-nav-btn carousel-next" aria-label="Suivant">
+              <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+          <div class="carousel-track bio-carousel-track" id="bioCarouselTrack"></div>
+        </div>
+      </div>
+
+      <div class="tab-panel" data-tab-panel="rl">
+        <div class="rl-info-grid" id="rlInfoGrid"></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="member-not-found" id="memberNotFound" style="display:none">
+  <p class="eyebrow">Fiche introuvable</p>
+  <h1 class="page-hero-title" style="font-size:26px">Ce membre n'existe pas (encore)</h1>
+  <a class='btn btn-solid' href='/#staff'>Retour au staff</a>
+</div>
+
+<footer class="site-footer">
+  <span class="brand-text small">GALAXY SINKS<sup>™</sup></span>
+  <p>© 2026 Galaxy Sinks™ — Tous droits réservés.</p>
+  <p class="footer-legal">Responsable : INSANE · SIREN en cours · galaxy.sinks8@gmail.com</p>
+</footer>
+
+<script src="common.js"></script>
+<script src="staff-data.js"></script>
+<script src="membre.js"></script>
+<script src="interactions.js"></script>
+<script src="audio.js"></script>
+</body>
+</html>

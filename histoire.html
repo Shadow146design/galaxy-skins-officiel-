@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L'histoire — Galaxy Sinks™</title>
+<meta name="description" content="L'épopée complète de Galaxy Sinks™ : de la création en 2017 à l'ascension actuelle sur Rocket League.">
+<meta name="theme-color" content="#05060f">
+<link rel="icon" type="image/png" href="/gs-logo.png">
+<link rel="apple-touch-icon" href="/gs-logo.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="histoire.css">
+<link rel="stylesheet" href="interactions.css">
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+<div class="space-bg" aria-hidden="true">
+  <span class="planet planet-1"><span class="planet-ring"></span></span>
+  <span class="planet planet-2"></span>
+  <span class="planet planet-3"><span class="planet-ring planet-ring-thin"></span></span>
+  <span class="planet planet-4"></span>
+</div>
+<div class="live-banner" id="liveBanner"><span class="live-banner-dot"></span><span id="liveBannerText"></span></div>
+
+<!-- ============ NAV ============ -->
+<header class="topbar" id="topbar">
+  <a class='brand' href='/'>
+    <span class="brand-mark">
+      <img src="/gs-logo.png" alt="Galaxy Sinks" width="30" height="30">
+    </span>
+    <span class="brand-text">GALAXY SINKS<sup>™</sup></span>
+  </a>
+
+  <nav class="nav" id="mainNav">
+    <a class='active' href='/histoire'>Histoire</a>
+    <a href='/roster'>Roster</a>
+    <a href='/competition'>Compétition</a>
+    <a href='/#classement'>Classement</a>
+    <a href='/boutique'>Boutique</a>
+    <a href='/clips'>Clips</a>
+    <a class='nav-highlight' href='/rejoindre'>Candidater</a>
+    <a href='/#contact'>Contact</a>
+  </nav>
+
+  <div class="nav-auth">
+    <a class='btn btn-ghost' href='/#top'>← Retour au site</a>
+  </div>
+
+  <button class="nav-burger" id="navBurger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<main>
+
+  <!-- ============ HERO ============ -->
+  <section class="story-hero">
+    <p class="eyebrow">Depuis le 25 novembre 2017</p>
+    <h1 class="story-hero-title">L'épopée<br>Galaxy Sinks<sup>™</sup></h1>
+    <p class="story-hero-sub">
+      Un crew né sur GTA V, dissous, puis reconstruit de zéro autour de Rocket League.
+      Voici les quatre chapitres qui ont mené à l'équipe d'aujourd'hui.
+    </p>
+  </section>
+
+  <!-- ============ FULL TIMELINE (zigzag) ============ -->
+  <section class="section story-full">
+    <ol class="zigzag-timeline">
+      <li class="zigzag-item side-left">
+        <div class="zigzag-node"><span>01</span></div>
+        <div class="zigzag-card fti-card">
+          <span class="fti-date">25 novembre 2017</span>
+          <h2>Création</h2>
+          <p>
+            Naissance officielle de Galaxy Sinks™. Un nom, une bannière, et l'idée simple
+            de rassembler un groupe de joueurs autour d'un même esprit de crew.
+          </p>
+        </div>
+      </li>
+
+      <li class="zigzag-item side-right">
+        <div class="zigzag-node"><span>02</span></div>
+        <div class="zigzag-card fti-card">
+          <span class="fti-date">L'âge d'or</span>
+          <h2>GTA&nbsp;V</h2>
+          <p>
+            Le crew grandit autour de GTA V : création d'un logo emblématique, premiers
+            événements internes, premières figures marquantes. Le collectif atteint alors
+            80 membres — la preuve qu'une communauté peut se construire vite quand l'énergie
+            est là.
+          </p>
+        </div>
+      </li>
+
+      <li class="zigzag-item side-left">
+        <div class="zigzag-node"><span>03</span></div>
+        <div class="zigzag-card fti-card">
+          <span class="fti-date">Il y a 3 mois</span>
+          <h2>La renaissance</h2>
+          <p>
+            Le serveur d'origine est supprimé. Plutôt que de laisser le crew disparaître,
+            le staff repart de zéro : nouvelle structure, nouveau Discord, et un choix clair —
+            se concentrer à 100&nbsp;% sur Rocket League plutôt que de disperser l'énergie du
+            collectif sur plusieurs jeux.
+          </p>
+        </div>
+      </li>
+
+      <li class="zigzag-item side-right zigzag-current">
+        <div class="zigzag-node"><span>04</span></div>
+        <div class="zigzag-card fti-card fti-card-current">
+          <span class="fti-date">Aujourd'hui</span>
+          <h2>L'ascension</h2>
+          <p>
+            De 10 à plus de 75 personnes en seulement 3 mois. Un roster compétitif qui
+            s'organise, un pôle vidéo qui prend forme, un classement de membres qui grandit
+            chaque semaine. L'épopée ne fait que commencer.
+          </p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ============ CHIFFRES ============ -->
+  <section class="section story-stats">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-number">75+</span>
+        <span class="stat-label">Membres au total</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">51</span>
+        <span class="stat-label">Joueurs officiels</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">18</span>
+        <span class="stat-label">Visiteurs &amp; amis</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA FINAL ============ -->
+  <section class="section story-final-cta">
+    <h2 class="section-title">Le prochain chapitre s'écrit maintenant</h2>
+    <p class="story-teaser-text">Rejoins le Discord, grimpe dans le classement, fais partie de la suite de l'histoire.</p>
+    <div class="hero-actions">
+      <a href="https://discord.gg/qdvY4hEHqT" target="_blank" rel="noopener" class="btn btn-solid btn-lg">Rejoindre le Discord</a>
+      <a class='btn btn-ghost btn-lg' href='/#classement'>Voir le classement</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <span class="brand-text small">GALAXY SINKS<sup>™</sup></span>
+  <p>© 2026 Galaxy Sinks™ — Tous droits réservés.</p>
+  <p class="footer-legal">Responsable : INSANE · SIREN en cours · galaxy.sinks8@gmail.com</p>
+</footer>
+
+<script src="common.js"></script>
+<script src="interactions.js"></script>
+<script src="audio.js"></script>
+</body>
+</html>

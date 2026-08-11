@@ -1,0 +1,116 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/api/live-match"
+  to = "/.netlify/functions/live-match"
+  status = 200
+
+[[redirects]]
+  from = "/api/leaderboard"
+  to = "/.netlify/functions/leaderboard"
+  status = 200
+
+[[redirects]]
+  from = "/api/applications"
+  to = "/.netlify/functions/applications"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/discord/callback"
+  to = "/.netlify/functions/auth-discord-callback"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/discord"
+  to = "/.netlify/functions/auth-discord"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/login"
+  to = "/.netlify/functions/auth-login"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/register"
+  to = "/.netlify/functions/auth-register"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/logout"
+  to = "/.netlify/functions/auth-logout"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/me"
+  to = "/.netlify/functions/auth-me"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/epic"
+  to = "/.netlify/functions/auth-epic"
+  status = 200
+
+[[redirects]]
+  from = "/api/profile/role"
+  to = "/.netlify/functions/profile-role"
+  status = 200
+
+[[redirects]]
+  from = "/api/profile/avatar"
+  to = "/.netlify/functions/profile-avatar"
+  status = 200
+
+[[redirects]]
+  from = "/api/avatar"
+  to = "/.netlify/functions/avatar"
+  status = 200
+
+[[redirects]]
+  from = "/api/rank/refresh"
+  to = "/.netlify/functions/rank-refresh"
+  status = 200
+
+[[redirects]]
+  from = "/api/rank/manual"
+  to = "/.netlify/functions/rank-manual"
+  status = 200
+
+[[redirects]]
+  from = "/api/clips/submit"
+  to = "/.netlify/functions/clips-submit"
+  status = 200
+
+[[redirects]]
+  from = "/api/clips/video"
+  to = "/.netlify/functions/clips-video"
+  status = 200
+
+[[redirects]]
+  from = "/api/clips"
+  to = "/.netlify/functions/clips-list"
+  status = 200
+
+[[redirects]]
+  from = "/api/admin/clips"
+  to = "/.netlify/functions/admin-clips"
+  status = 200
+
+[[redirects]]
+  from = "/api/admin/verify-role"
+  to = "/.netlify/functions/admin-verify-role"
+  status = 200
+
+[[redirects]]
+  from = "/api/admin/set-role"
+  to = "/.netlify/functions/admin-set-role"
+  status = 200
+
+[[redirects]]
+  from = "/api/admin/set-admin"
+  to = "/.netlify/functions/admin-set-admin"
+  status = 200

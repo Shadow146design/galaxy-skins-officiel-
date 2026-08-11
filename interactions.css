@@ -1,0 +1,493 @@
+/* =========================================================
+   Galaxy Sinks™ — interactions.css
+   Mécaniques partagées sur tout le site : boutons (shimmer,
+   glow, press), hover de cartes, reveal au scroll, onglets,
+   accordéon, carrousel horizontal.
+   ========================================================= */
+
+/* ================= BOUTONS ================= */
+
+.btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform .18s ease, box-shadow .25s ease, background .25s ease, color .25s ease;
+}
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -60%;
+  width: 40%; height: 100%;
+  background: linear-gradient(115deg, transparent, rgba(255,255,255,0.45), transparent);
+  transform: skewX(-18deg);
+  transition: left .6s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+.btn:hover::after { left: 130%; }
+.btn:active { transform: scale(.95); }
+
+.btn-solid:hover {
+  box-shadow:
+    0 10px 28px -8px rgba(140, 107, 255, .65),
+    0 0 22px rgba(63, 224, 255, .3);
+}
+.btn-ghost {
+  z-index: 0;
+}
+.btn-ghost::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--nebula), var(--cyan));
+  opacity: 0;
+  transition: opacity .25s ease;
+  z-index: -1;
+}
+.btn-ghost:hover::before { opacity: .14; }
+.btn-ghost:hover { box-shadow: 0 0 0 1px var(--cyan) inset, 0 0 16px rgba(63, 224, 255, .25); }
+
+/* Ripple au clic (ajouté dynamiquement en JS) */
+.btn-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.55);
+  transform: scale(0);
+  animation: rippleAnim .55s ease-out forwards;
+  pointer-events: none;
+  z-index: 2;
+}
+@keyframes rippleAnim {
+  to { transform: scale(2.6); opacity: 0; }
+}
+
+/* ================= HOVER DE CARTES ================= */
+
+.staff-card, .product-card, .roster-card, .division-card,
+.news-card, .stat-card, .fti-card-current, .clip-card,
+.match-row, .app-icon-glyph, .roster-card, .division-card {
+  transition: transform .3s cubic-bezier(.2,.8,.25,1), box-shadow .3s ease, border-color .3s ease;
+}
+
+.staff-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(63, 224, 255, .5);
+  box-shadow: 0 18px 36px -16px rgba(63, 224, 255, .35);
+}
+.roster-card:hover, .division-card:hover {
+  transform: translateY(-5px) scale(1.015);
+  border-color: rgba(140, 107, 255, .55);
+  box-shadow: 0 16px 32px -14px rgba(140, 107, 255, .4);
+}
+.news-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 207, 92, .4);
+  box-shadow: 0 14px 28px -14px rgba(255, 207, 92, .3);
+}
+.fti-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(63, 224, 255, .4);
+  box-shadow: 0 14px 30px -16px rgba(63, 224, 255, .3);
+}
+.stat-card:hover {
+  transform: scale(1.04);
+  box-shadow: 0 16px 34px -16px rgba(255, 207, 92, .4);
+}
+.clip-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 30px -14px rgba(63, 224, 255, .3);
+}
+.match-row:hover {
+  transform: translateX(4px);
+  border-color: rgba(63, 224, 255, .4);
+}
+.product-card { transition: transform .25s ease, box-shadow .25s ease; }
+
+/* Halo qui balaie les cartes de staff / division au survol */
+.staff-card, .division-card, .roster-card {
+  position: relative;
+  overflow: hidden;
+}
+.staff-card::before, .division-card::before, .roster-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -75%;
+  width: 50%; height: 100%;
+  background: linear-gradient(110deg, transparent, rgba(255,255,255,0.06), transparent);
+  transform: skewX(-15deg);
+  transition: left .65s ease;
+  pointer-events: none;
+}
+.staff-card:hover::before, .division-card:hover::before, .roster-card:hover::before { left: 130%; }
+
+/* ================= REVEAL AU SCROLL =================
+   Chaque carte/ligne est masquée puis glisse/apparaît quand elle entre dans
+   le viewport (voir l'IntersectionObserver dans interactions.js — la liste
+   de sélecteurs ci-dessous doit rester identique des deux côtés). Les règles
+   ".in-view" sont scopées par sélecteur (plutôt qu'une règle ".in-view"
+   générique en !important) pour ne jamais entrer en conflit avec une
+   éventuelle animation propre à l'élément (ex. .glass-card ci-dessous). */
+
+.staff-card, .product-card, .roster-card, .division-card,
+.news-card, .stat-card, .fti-card, .clip-card, .match-row,
+.story-teaser, .countdown-panel, .apply-form, .accordion-item,
+.event-card, .contact-card, .leaderboard-list-row, .member-table-row,
+.film-card, .schedule-row, .result-row, .rl-info-card, .staff-galaxy {
+  opacity: 0;
+  transform: translateY(34px);
+  filter: blur(9px);
+  transition: opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1), filter .9s cubic-bezier(.16,1,.3,1);
+}
+.staff-card.in-view, .product-card.in-view, .roster-card.in-view, .division-card.in-view,
+.news-card.in-view, .stat-card.in-view, .fti-card.in-view, .clip-card.in-view, .match-row.in-view,
+.story-teaser.in-view, .countdown-panel.in-view, .apply-form.in-view, .accordion-item.in-view,
+.event-card.in-view, .contact-card.in-view, .leaderboard-list-row.in-view, .member-table-row.in-view,
+.film-card.in-view, .schedule-row.in-view, .result-row.in-view, .rl-info-card.in-view, .staff-galaxy.in-view {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* .glass-card a déjà sa propre animation de flottement (cardFloat, qui
+   anime transform) — on ne révèle donc que l'opacité et le flou, sans
+   toucher au transform, pour ne jamais interrompre ce flottement une fois
+   visible. */
+.glass-card {
+  opacity: 0;
+  filter: blur(9px);
+  transition: opacity .9s cubic-bezier(.16,1,.3,1), filter .9s cubic-bezier(.16,1,.3,1);
+}
+.glass-card.in-view {
+  opacity: 1;
+  filter: blur(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .staff-card, .product-card, .roster-card, .division-card,
+  .news-card, .stat-card, .fti-card, .clip-card, .match-row,
+  .story-teaser, .countdown-panel, .apply-form, .accordion-item,
+  .event-card, .contact-card, .leaderboard-list-row, .member-table-row,
+  .film-card, .schedule-row, .result-row, .rl-info-card, .staff-galaxy,
+  .glass-card {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* ================= LUEUR CURSEUR SUR LES CARTES =================
+   Halo qui suit le pointeur sur les cartes interactives — recréation en CSS
+   pur du point light qui suivait la souris sur le prototype 3D. --mx/--my
+   sont mis à jour par interactions.js ; sans JS l'effet reste simplement
+   invisible (opacity 0 par défaut). */
+.glass-card, .stat-card, .podium-slot, .contact-card,
+.staff-card, .product-card, .roster-card, .division-card,
+.news-card, .fti-card, .clip-card {
+  position: relative;
+}
+.glass-card::after, .stat-card::after, .podium-slot::after, .contact-card::after,
+.staff-card::after, .product-card::after, .roster-card::after, .division-card::after,
+.news-card::after, .fti-card::after, .clip-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle 200px at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, .10), transparent 70%);
+  opacity: 0;
+  transition: opacity .4s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+.glass-card:hover::after, .stat-card:hover::after, .podium-slot:hover::after, .contact-card:hover::after,
+.staff-card:hover::after, .product-card:hover::after, .roster-card:hover::after, .division-card:hover::after,
+.news-card:hover::after, .fti-card:hover::after, .clip-card:hover::after {
+  opacity: 1;
+}
+
+/* ================= PROGRESSION DE SCROLL ================= */
+
+.scroll-progress {
+  position: fixed;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 30vh;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .08);
+  z-index: 40;
+  overflow: hidden;
+}
+.scroll-progress-fill {
+  display: block;
+  width: 100%;
+  height: 0%;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--cyan), var(--nebula));
+  box-shadow: 0 0 12px rgba(63, 224, 255, .6);
+}
+@media (max-width: 720px) {
+  .scroll-progress { display: none; }
+}
+
+/* ================= RETOUR EN HAUT ================= */
+
+.to-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 40;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: rgba(11, 14, 32, .75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--cyan);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(14px) scale(.9);
+  pointer-events: none;
+  transition: opacity .3s ease, transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+}
+.to-top.is-visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+.to-top:hover { border-color: var(--cyan); box-shadow: 0 0 20px rgba(63, 224, 255, .5); transform: translateY(-2px) scale(1.05); }
+.to-top svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+@media (max-width: 640px) {
+  .to-top { width: 40px; height: 40px; bottom: 16px; right: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-card::after, .stat-card::after, .podium-slot::after, .contact-card::after,
+  .staff-card::after, .product-card::after, .roster-card::after, .division-card::after,
+  .news-card::after, .fti-card::after, .clip-card::after {
+    display: none;
+  }
+}
+
+/* ================= BOUTON AMBIANCE SONORE ================= */
+
+.audio-toggle {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 40;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: rgba(11, 14, 32, .75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--cyan);
+  cursor: pointer;
+  transition: box-shadow .3s ease, border-color .3s ease, color .3s ease, transform .2s ease;
+}
+.audio-toggle:hover { border-color: var(--cyan); box-shadow: 0 0 20px rgba(63, 224, 255, .5); transform: translateY(-2px); }
+.audio-toggle.is-muted { color: var(--text-muted); }
+.audio-icon { width: 20px; height: 20px; }
+.audio-icon-off { display: none; }
+.audio-toggle.is-muted .audio-icon-on { display: none; }
+.audio-toggle.is-muted .audio-icon-off { display: block; }
+@media (max-width: 640px) {
+  .audio-toggle { width: 40px; height: 40px; bottom: 16px; left: 16px; }
+}
+
+/* ================= TOASTS ================= */
+
+.toast-stack {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  pointer-events: none;
+  width: min(420px, calc(100vw - 32px));
+}
+.toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: rgba(11, 14, 32, .92);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 14px 34px -14px rgba(0, 0, 0, .6);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+  opacity: 0;
+  transform: translateY(14px) scale(.96);
+  transition: opacity .3s ease, transform .3s ease;
+}
+.toast.show { opacity: 1; transform: translateY(0) scale(1); }
+.toast-icon { width: 18px; height: 18px; flex-shrink: 0; }
+.toast-success { border-color: rgba(63, 224, 255, .4); }
+.toast-success .toast-icon { color: var(--cyan); }
+.toast-error { border-color: rgba(255, 92, 122, .4); }
+.toast-error .toast-icon { color: var(--live); }
+.toast-info .toast-icon { color: var(--gold); }
+@media (max-width: 640px) {
+  .toast-stack { bottom: 16px; }
+}
+
+/* ================= CONFETTI ================= */
+
+.confetti-burst {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 90;
+}
+.confetti-burst span {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  opacity: 0;
+  animation: confettiPop 1.1s cubic-bezier(.2, .8, .3, 1) forwards;
+}
+@keyframes confettiPop {
+  0% { opacity: 1; transform: translate(0, 0) rotate(0deg) scale(1); }
+  100% { opacity: 0; transform: translate(var(--dx), calc(var(--dy) + 160px)) rotate(var(--rot)) scale(.4); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .confetti-burst { display: none; }
+}
+
+/* ================= ONGLETS (tabs) ================= */
+
+.tabs-nav {
+  display: inline-flex;
+  gap: 4px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px;
+  margin-bottom: 28px;
+}
+.tab-btn {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-weight: 700;
+  font-size: 13.5px;
+  padding: 9px 20px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease;
+}
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--nebula), var(--cyan));
+  color: #05060f;
+}
+.tab-panel { display: none; }
+.tab-panel.active {
+  display: block;
+  animation: tabFadeIn .35s ease;
+}
+@keyframes tabFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ================= ACCORDÉON ================= */
+
+.accordion-item {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: linear-gradient(160deg, var(--panel), var(--panel-2));
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.accordion-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  background: none;
+  border: none;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-body);
+}
+.accordion-num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--gold);
+  min-width: 22px;
+}
+.accordion-title { font-family: var(--font-display); font-size: 15px; flex: 1; }
+.accordion-chevron {
+  width: 18px; height: 18px;
+  stroke: var(--text-muted);
+  fill: none;
+  stroke-width: 2;
+  transition: transform .3s ease;
+  flex-shrink: 0;
+}
+.accordion-item.open .accordion-chevron { transform: rotate(180deg); stroke: var(--cyan); }
+.accordion-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .35s ease;
+}
+.accordion-body-inner {
+  padding: 0 20px 20px 56px;
+  color: var(--text-muted);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+/* ================= CARROUSEL HORIZONTAL ================= */
+
+.carousel {
+  position: relative;
+}
+.carousel-track {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding-bottom: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--nebula) transparent;
+  cursor: grab;
+}
+.carousel-track:active { cursor: grabbing; }
+.carousel-track::-webkit-scrollbar { height: 6px; }
+.carousel-track::-webkit-scrollbar-thumb { background: var(--nebula); border-radius: 999px; }
+.carousel-track > * { scroll-snap-align: start; flex-shrink: 0; }
+
+.carousel-nav {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+.carousel-nav-btn {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .2s ease, color .2s ease;
+}
+.carousel-nav-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+.carousel-nav-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; }

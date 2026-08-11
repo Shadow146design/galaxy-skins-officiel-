@@ -1,0 +1,217 @@
+/* =========================================================
+   Galaxy Sinks™ — histoire.css
+   Mise en page dédiée au récit complet : hero cinématique +
+   timeline en zigzag + fond spatial avec planètes lointaines.
+   ========================================================= */
+
+/* ---- Fond spatial : planètes lointaines qui dérivent, tournent,
+   apparaissent et disparaissent lentement ---- */
+.space-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.planet {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0;
+}
+.planet-1 {
+  top: 10%; left: 6%;
+  width: 78px; height: 78px;
+  background: radial-gradient(circle at 32% 28%, #b79bff, var(--nebula) 55%, #2a1a5c 100%);
+  box-shadow: 0 0 46px rgba(140, 107, 255, .35), inset -12px -12px 26px rgba(0,0,0,.5);
+  animation: planetDrift1 75s ease-in-out infinite, planetFade1 38s ease-in-out infinite;
+}
+.planet-2 {
+  top: 62%; right: 9%;
+  width: 110px; height: 110px;
+  background: radial-gradient(circle at 30% 25%, #9beeff, var(--cyan) 55%, #0a4b57 100%);
+  box-shadow: 0 0 60px rgba(63, 224, 255, .3), inset -14px -14px 30px rgba(0,0,0,.5);
+  animation: planetDrift2 95s ease-in-out infinite, planetFade2 50s ease-in-out infinite;
+}
+.planet-3 {
+  top: 22%; right: 18%;
+  width: 34px; height: 34px;
+  background: radial-gradient(circle at 35% 30%, #ffe9b0, var(--gold) 60%, #7a5410 100%);
+  box-shadow: 0 0 30px rgba(255, 207, 92, .4);
+  animation: planetDrift3 55s ease-in-out infinite, planetFade3 28s ease-in-out infinite;
+}
+.planet-4 {
+  bottom: 10%; left: 16%;
+  width: 52px; height: 52px;
+  background: radial-gradient(circle at 30% 25%, #d9d2ff, #6a5acd 55%, #241a4a 100%);
+  box-shadow: 0 0 34px rgba(106, 90, 205, .35);
+  animation: planetDrift4 65s ease-in-out infinite, planetFade1 44s ease-in-out infinite;
+  animation-delay: 0s, 6s;
+}
+
+.planet-ring {
+  position: absolute;
+  inset: -30% -65%;
+  border: 2px solid rgba(255,255,255,0.28);
+  border-radius: 50%;
+  transform: rotateX(72deg) rotate(0deg);
+  animation: planetRingSpin 26s linear infinite;
+}
+.planet-ring-thin { border-width: 1px; border-color: rgba(255, 207, 92, .35); }
+
+@keyframes planetRingSpin {
+  to { transform: rotateX(72deg) rotate(360deg); }
+}
+
+@keyframes planetDrift1 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(36px, -26px); }
+}
+@keyframes planetDrift2 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-44px, 30px); }
+}
+@keyframes planetDrift3 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-20px, 22px); }
+}
+@keyframes planetDrift4 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(24px, 18px); }
+}
+
+/* Apparition / disparition lente et désynchronisée entre les planètes */
+@keyframes planetFade1 {
+  0%, 100% { opacity: 0; }
+  20% { opacity: .8; }
+  50% { opacity: .8; }
+  80% { opacity: 0; }
+}
+@keyframes planetFade2 {
+  0%, 100% { opacity: 0; }
+  30% { opacity: .65; }
+  55% { opacity: .65; }
+  85% { opacity: 0; }
+}
+@keyframes planetFade3 {
+  0%, 100% { opacity: 0; }
+  15% { opacity: .9; }
+  45% { opacity: .9; }
+  75% { opacity: 0; }
+}
+
+@media (max-width: 640px) {
+  .planet-2, .planet-4 { display: none; }
+}
+
+.story-hero {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 90px 24px 30px;
+  text-align: center;
+}
+.story-hero-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(34px, 6vw, 56px);
+  line-height: 1.1;
+  margin: 14px 0 20px;
+  background: linear-gradient(135deg, #fff 20%, var(--cyan) 55%, var(--nebula) 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.story-hero-title sup { font-size: .3em; -webkit-text-fill-color: var(--gold); }
+.story-hero-sub { color: var(--text-muted); font-size: 15px; max-width: 540px; margin: 0 auto; }
+
+.story-full { padding-top: 30px; }
+
+/* ---- Timeline en zigzag (alternance gauche/droite) ---- */
+.zigzag-timeline {
+  position: relative;
+  list-style: none;
+  margin: 0 auto;
+  padding: 10px 0 0;
+  max-width: 820px;
+}
+.zigzag-timeline::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0; bottom: 30px;
+  width: 2px;
+  background: linear-gradient(var(--nebula), var(--cyan));
+  transform: translateX(-50%);
+}
+.zigzag-item {
+  position: relative;
+  width: 50%;
+  padding: 0 44px 66px;
+}
+.zigzag-item.side-left { left: 0; text-align: right; }
+.zigzag-item.side-right { left: 50%; text-align: left; }
+
+.zigzag-node {
+  position: absolute;
+  top: 2px;
+  width: 50px; height: 50px;
+  border-radius: 50%;
+  background: var(--void);
+  border: 2px solid var(--cyan);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--gold);
+  z-index: 2;
+}
+.side-left .zigzag-node { right: -25px; }
+.side-right .zigzag-node { left: -25px; }
+.zigzag-current .zigzag-node {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 6px rgba(255, 207, 92, .15);
+}
+
+.zigzag-card {
+  display: inline-block;
+  max-width: 100%;
+  text-align: left;
+}
+
+@media (max-width: 720px) {
+  .zigzag-timeline::before { left: 20px; }
+  .zigzag-item, .zigzag-item.side-left, .zigzag-item.side-right {
+    width: 100%;
+    left: 0;
+    text-align: left;
+    padding: 0 0 50px 56px;
+  }
+  .side-left .zigzag-node, .side-right .zigzag-node { left: -6px; right: auto; }
+}
+
+/* Détails des cartes de chapitre (réutilisés par la timeline en zigzag) */
+.fti-card {
+  background: linear-gradient(160deg, var(--panel), var(--panel-2));
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 22px 24px;
+}
+.fti-date {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: .5px;
+}
+.fti-card h2 {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 3vw, 26px);
+  margin: 6px 0 10px;
+}
+.fti-card p { color: var(--text-muted); font-size: 14.5px; margin: 0; }
+.fti-card-current {
+  border-color: rgba(255, 207, 92, 0.35);
+}
+
+.story-stats { padding-top: 10px; }
+.story-final-cta { text-align: center; padding-bottom: 100px; }
+.story-final-cta .story-teaser-text { margin: -14px auto 28px; }
+.story-final-cta .hero-actions { justify-content: center; }
