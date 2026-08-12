@@ -26,6 +26,16 @@
   status = 200
 
 [[redirects]]
+  from = "/api/competition"
+  to = "/.netlify/functions/competition"
+  status = 200
+
+[[redirects]]
+  from = "/api/admin/competition"
+  to = "/.netlify/functions/admin-competition"
+  status = 200
+
+[[redirects]]
   from = "/api/applications"
   to = "/.netlify/functions/applications"
   status = 200

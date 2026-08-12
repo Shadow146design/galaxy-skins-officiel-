@@ -98,6 +98,31 @@
       <p class="form-error" id="rosterError"></p>
     </section>
 
+    <!-- ============ GESTION DE LA COMPÉTITION ============ -->
+    <section class="admin-panel">
+      <h2 class="admin-panel-title">Compétition — prochains matchs</h2>
+      <p class="admin-panel-sub">Pilote le compte à rebours et le calendrier de la page Compétition (nom, date, heure, note).</p>
+      <div id="adminEventsList" class="admin-comp-list">
+        <p class="admin-empty">Chargement…</p>
+      </div>
+      <div class="admin-roster-actions">
+        <button type="button" class="btn btn-ghost" id="addEventBtn">+ Ajouter un événement</button>
+      </div>
+    </section>
+
+    <section class="admin-panel">
+      <h2 class="admin-panel-title">Compétition — résultats</h2>
+      <p class="admin-panel-sub">Ajoute ou modifie les scores des matchs joués — victoires/défaites, taux de victoire, série en cours et forme sur 5 matchs se recalculent automatiquement à partir des scores.</p>
+      <div id="adminMatchesList" class="admin-comp-list">
+        <p class="admin-empty">Chargement…</p>
+      </div>
+      <div class="admin-roster-actions">
+        <button type="button" class="btn btn-ghost" id="addMatchBtn">+ Ajouter un résultat</button>
+        <button type="button" class="btn btn-solid" id="saveCompetitionBtn">Enregistrer la compétition</button>
+      </div>
+      <p class="form-error" id="competitionError"></p>
+    </section>
+
   </div>
 </main>
 

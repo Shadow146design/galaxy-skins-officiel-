@@ -2,30 +2,14 @@
 
 /* =========================================================
    Galaxy Sinks™ — competition.js
-   Données statiques éditables par le staff (tableaux ci-dessous) +
-   dashboard (horloge LED, bandeau de stats, ticker de forme,
-   calendrier / résultats). Nécessite common.js.
+   Calendrier + historique des matchs chargés depuis /api/competition
+   (gérés par le staff via /admin, voir admin.js) + dashboard (horloge
+   LED, bandeau de stats, ticker de forme, calendrier / résultats).
+   Nécessite common.js.
    ========================================================= */
 
-/* ---------------------------------------------------------
-   À éditer par le staff : événements à venir.
-   --------------------------------------------------------- */
-const EVENTS = [
-  { name: 'Tournoi Grand Champion (1v1)', date: '2026-09-02T18:00:00', note: 'Bracket simple élimination' },
-  { name: 'Scrim amical vs RZN ESPORT', date: '2026-08-20T20:00:00', note: 'Best of 5, en interne Discord' },
-];
-
-/* ---------------------------------------------------------
-   À éditer par le staff : historique des matchs (du plus
-   récent au plus ancien). result : 'win' | 'loss'
-   --------------------------------------------------------- */
-const MATCHES = [
-  { date: '2026-08-04', opponent: 'RZN ESPORT', scoreFor: 3, scoreAgainst: 1, result: 'win' },
-  { date: '2026-07-28', opponent: 'Nova Wolves', scoreFor: 2, scoreAgainst: 3, result: 'loss' },
-  { date: '2026-07-21', opponent: 'Static Order', scoreFor: 4, scoreAgainst: 0, result: 'win' },
-  { date: '2026-07-14', opponent: 'Echo Circuit', scoreFor: 1, scoreAgainst: 3, result: 'loss' },
-  { date: '2026-07-07', opponent: 'Halo Union', scoreFor: 3, scoreAgainst: 2, result: 'win' },
-];
+let EVENTS = [];
+let MATCHES = [];
 
 /* ---------------------------------------------------------
    Horloge LED — compte à rebours vers le prochain événement
@@ -63,7 +47,6 @@ function renderCountdown() {
   tick();
   setInterval(tick, 1000);
 }
-renderCountdown();
 
 /* ---------------------------------------------------------
    Bandeau de stats — calculé à partir de MATCHES
@@ -85,10 +68,9 @@ function renderStats() {
     <div class="stats-strip-item"><span class="stats-strip-num">${wins}</span><span class="stats-strip-label">Victoires</span></div>
     <div class="stats-strip-item"><span class="stats-strip-num">${losses}</span><span class="stats-strip-label">Défaites</span></div>
     <div class="stats-strip-item"><span class="stats-strip-num">${winRate}%</span><span class="stats-strip-label">Taux de victoire</span></div>
-    <div class="stats-strip-item"><span class="stats-strip-num">${streak}</span><span class="stats-strip-label">${streakType === 'win' ? 'Victoires d\u2019affilée' : 'Défaites d\u2019affilée'}</span></div>
+    <div class="stats-strip-item"><span class="stats-strip-num">${streak}</span><span class="stats-strip-label">${streakType === 'win' ? 'Victoires d’affilée' : 'Défaites d’affilée'}</span></div>
   `;
 }
-renderStats();
 
 /* ---------------------------------------------------------
    Ticker de forme — 5 derniers matchs
@@ -99,7 +81,6 @@ function renderFormTicker() {
     <span class="form-dot ${m.result}" title="vs ${m.opponent} — ${m.scoreFor}-${m.scoreAgainst}">${m.result === 'win' ? 'V' : 'D'}</span>
   `).join('');
 }
-renderFormTicker();
 
 /* ---------------------------------------------------------
    Calendrier — prochains matchs
@@ -126,7 +107,6 @@ function renderSchedule() {
     </div>
   `).join('');
 }
-renderSchedule();
 
 function renderResults() {
   const list = $('#resultsList');
@@ -134,7 +114,8 @@ function renderResults() {
     list.innerHTML = '<div class="roster-empty">Aucun match enregistré pour le moment.</div>';
     return;
   }
-  list.innerHTML = MATCHES.map((m) => {
+  const sorted = [...MATCHES].sort((a, b) => new Date(b.date) - new Date(a.date));
+  list.innerHTML = sorted.map((m) => {
     const total = m.scoreFor + m.scoreAgainst || 1;
     const pct = Math.round((m.scoreFor / total) * 100);
     const d = new Date(m.date);
@@ -152,4 +133,21 @@ function renderResults() {
     `;
   }).join('');
 }
-renderResults();
+
+async function loadCompetition() {
+  try {
+    const res = await fetch('/api/competition');
+    const data = await res.json();
+    EVENTS = data.events || [];
+    MATCHES = (data.matches || []).sort((a, b) => new Date(b.date) - new Date(a.date));
+  } catch {
+    EVENTS = [];
+    MATCHES = [];
+  }
+  renderCountdown();
+  renderStats();
+  renderFormTicker();
+  renderSchedule();
+  renderResults();
+}
+loadCompetition();

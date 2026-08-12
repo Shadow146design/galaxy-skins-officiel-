@@ -318,6 +318,152 @@ $('#saveRosterBtn').addEventListener('click', async () => {
   }
 });
 
+/* ---------------------------------------------------------
+   Gestion de la compétition (événements à venir + résultats)
+   --------------------------------------------------------- */
+let eventsDraft = [];
+let matchesDraft = [];
+
+function readEventsDraftFromDom() {
+  const rows = $('#adminEventsList').querySelectorAll('.admin-event-row');
+  eventsDraft = Array.from(rows).map((row) => ({
+    id: row.dataset.id || undefined,
+    name: row.querySelector('.event-name-input').value,
+    date: `${row.querySelector('.event-date-input').value}T${row.querySelector('.event-time-input').value || '00:00'}`,
+    note: row.querySelector('.event-note-input').value,
+  }));
+}
+
+function renderEventsEditor() {
+  const list = $('#adminEventsList');
+  if (eventsDraft.length === 0) {
+    list.innerHTML = '<p class="admin-empty">Aucun événement. Clique sur « + Ajouter un événement ».</p>';
+    return;
+  }
+  list.innerHTML = eventsDraft.map((e, i) => {
+    const [datePart, timePart] = String(e.date || '').split('T');
+    return `
+      <div class="admin-comp-row admin-event-row" data-id="${escapeHtml(e.id || '')}" data-index="${i}">
+        <input type="text" class="event-name-input" placeholder="Nom de l'événement" value="${escapeHtml(e.name || '')}">
+        <input type="date" class="event-date-input" value="${escapeHtml(datePart || '')}">
+        <input type="time" class="event-time-input" value="${escapeHtml((timePart || '').slice(0, 5))}">
+        <input type="text" class="event-note-input" placeholder="Note (optionnel)" value="${escapeHtml(e.note || '')}">
+        <button type="button" class="btn btn-ghost admin-comp-delete-btn" title="Supprimer">✕</button>
+      </div>
+    `;
+  }).join('');
+
+  list.querySelectorAll('.admin-comp-delete-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      readEventsDraftFromDom();
+      const index = Number(btn.closest('.admin-event-row').dataset.index);
+      eventsDraft.splice(index, 1);
+      renderEventsEditor();
+    });
+  });
+}
+
+function readMatchesDraftFromDom() {
+  const rows = $('#adminMatchesList').querySelectorAll('.admin-match-row');
+  matchesDraft = Array.from(rows).map((row) => ({
+    id: row.dataset.id || undefined,
+    date: row.querySelector('.match-date-input').value,
+    opponent: row.querySelector('.match-opponent-input').value,
+    scoreFor: Number(row.querySelector('.match-score-for-input').value) || 0,
+    scoreAgainst: Number(row.querySelector('.match-score-against-input').value) || 0,
+  }));
+}
+
+function renderMatchesEditor() {
+  const list = $('#adminMatchesList');
+  if (matchesDraft.length === 0) {
+    list.innerHTML = '<p class="admin-empty">Aucun résultat. Clique sur « + Ajouter un résultat ».</p>';
+    return;
+  }
+  list.innerHTML = matchesDraft.map((m, i) => `
+    <div class="admin-comp-row admin-match-row" data-id="${escapeHtml(m.id || '')}" data-index="${i}">
+      <input type="date" class="match-date-input" value="${escapeHtml(m.date || '')}">
+      <input type="text" class="match-opponent-input" placeholder="Adversaire" value="${escapeHtml(m.opponent || '')}">
+      <input type="number" class="match-score-for-input" min="0" max="99" value="${Number(m.scoreFor) || 0}">
+      <span class="admin-match-vs">–</span>
+      <input type="number" class="match-score-against-input" min="0" max="99" value="${Number(m.scoreAgainst) || 0}">
+      <span class="admin-match-result-badge ${Number(m.scoreFor) > Number(m.scoreAgainst) ? 'win' : 'loss'}">${Number(m.scoreFor) > Number(m.scoreAgainst) ? 'V' : 'D'}</span>
+      <button type="button" class="btn btn-ghost admin-comp-delete-btn" title="Supprimer">✕</button>
+    </div>
+  `).join('');
+
+  list.querySelectorAll('.match-score-for-input, .match-score-against-input').forEach((input) => {
+    input.addEventListener('input', () => {
+      const row = input.closest('.admin-match-row');
+      const sf = Number(row.querySelector('.match-score-for-input').value) || 0;
+      const sa = Number(row.querySelector('.match-score-against-input').value) || 0;
+      const badge = row.querySelector('.admin-match-result-badge');
+      badge.className = 'admin-match-result-badge ' + (sf > sa ? 'win' : 'loss');
+      badge.textContent = sf > sa ? 'V' : 'D';
+    });
+  });
+
+  list.querySelectorAll('.admin-comp-delete-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      readMatchesDraftFromDom();
+      const index = Number(btn.closest('.admin-match-row').dataset.index);
+      matchesDraft.splice(index, 1);
+      renderMatchesEditor();
+    });
+  });
+}
+
+async function loadAdminCompetition() {
+  try {
+    const res = await fetch('/api/competition');
+    const data = await res.json();
+    eventsDraft = data.events || [];
+    matchesDraft = (data.matches || []).map(({ id, date, opponent, scoreFor, scoreAgainst }) => (
+      { id, date, opponent, scoreFor, scoreAgainst }
+    ));
+    renderEventsEditor();
+    renderMatchesEditor();
+  } catch {
+    $('#adminEventsList').innerHTML = '<p class="admin-empty">Erreur de chargement.</p>';
+    $('#adminMatchesList').innerHTML = '<p class="admin-empty">Erreur de chargement.</p>';
+  }
+}
+
+$('#addEventBtn').addEventListener('click', () => {
+  readEventsDraftFromDom();
+  eventsDraft.push({ name: '', date: '', note: '' });
+  renderEventsEditor();
+});
+
+$('#addMatchBtn').addEventListener('click', () => {
+  readMatchesDraftFromDom();
+  matchesDraft.push({ date: '', opponent: '', scoreFor: 0, scoreAgainst: 0 });
+  renderMatchesEditor();
+});
+
+$('#saveCompetitionBtn').addEventListener('click', async () => {
+  readEventsDraftFromDom();
+  readMatchesDraftFromDom();
+  const errEl = $('#competitionError');
+  errEl.textContent = '';
+  try {
+    const res = await fetch('/api/admin/competition', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ events: eventsDraft, matches: matchesDraft }),
+    });
+    const data = await res.json();
+    if (!res.ok) { errEl.textContent = data.error || 'Erreur.'; return; }
+    eventsDraft = data.events;
+    matchesDraft = data.matches;
+    renderEventsEditor();
+    renderMatchesEditor();
+    if (window.showToast) window.showToast('Compétition mise à jour.', 'success');
+  } catch {
+    errEl.textContent = 'Erreur réseau. Réessaie.';
+  }
+});
+
 (async function init() {
   const isAdmin = await checkAdminAccess();
   if (!isAdmin) {
@@ -329,4 +475,5 @@ $('#saveRosterBtn').addEventListener('click', async () => {
   loadAdminClips();
   loadAdminRoles();
   loadAdminRoster();
+  loadAdminCompetition();
 })();

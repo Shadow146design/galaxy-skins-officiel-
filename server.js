@@ -15,6 +15,8 @@ const ROUTE_TABLE = [
   ['/api/live-match', 'live-match.js'],
   ['/api/roster', 'roster.js'],
   ['/api/admin/roster', 'admin-roster.js'],
+  ['/api/competition', 'competition.js'],
+  ['/api/admin/competition', 'admin-competition.js'],
   ['/api/leaderboard', 'leaderboard.js'],
   ['/api/applications', 'applications.js'],
   ['/api/auth/discord/callback', 'auth-discord-callback.js'],

@@ -157,6 +157,47 @@
 .admin-roster-delete-btn { padding: 8px 12px; color: var(--live); border-color: var(--live); }
 .admin-roster-actions { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
 
+/* ---- Compétition (événements + résultats) ---- */
+.admin-comp-list { display: flex; flex-direction: column; gap: 10px; }
+.admin-comp-row {
+  display: grid;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.admin-event-row { grid-template-columns: 1.6fr 1fr .8fr 1.2fr auto; }
+.admin-match-row { grid-template-columns: 1fr 1.4fr 60px auto 60px auto auto; }
+.admin-comp-row input {
+  background: var(--void);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
+  color: var(--text);
+  font-size: 13px;
+  font-family: var(--font-body);
+  width: 100%;
+}
+.admin-match-vs { color: var(--text-muted); text-align: center; font-family: var(--font-mono); }
+.admin-match-result-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 12px;
+}
+.admin-match-result-badge.win { color: var(--gold); background: rgba(255,207,92,.14); }
+.admin-match-result-badge.loss { color: var(--live); background: rgba(255,92,122,.14); }
+.admin-comp-delete-btn { padding: 8px 12px; color: var(--live); border-color: var(--live); }
+
+@media (max-width: 860px) {
+  .admin-event-row, .admin-match-row { grid-template-columns: 1fr; }
+}
+
 @media (max-width: 720px) {
   .admin-form { grid-template-columns: 1fr; }
   .admin-clip-row { grid-template-columns: 1fr; }
