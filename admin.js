@@ -24,6 +24,127 @@ async function checkAdminAccess() {
 }
 
 /* ---------------------------------------------------------
+   Compteurs (badge à côté d'un titre de panneau + résumé en haut
+   de page). counts = { applications: n, clips: n }
+   --------------------------------------------------------- */
+const pendingCounts = { applications: 0, clips: 0 };
+
+function setPanelCount(elId, n) {
+  const el = $(elId);
+  if (!el) return;
+  if (n > 0) {
+    el.textContent = n;
+    el.classList.remove('hidden');
+  } else {
+    el.classList.add('hidden');
+  }
+}
+
+function renderQuickStats() {
+  const items = [
+    { n: pendingCounts.applications, label: pendingCounts.applications > 1 ? 'candidatures en attente' : 'candidature en attente' },
+    { n: pendingCounts.clips, label: pendingCounts.clips > 1 ? 'clips à modérer' : 'clip à modérer' },
+  ].filter((i) => i.n > 0);
+
+  const el = $('#adminQuickStats');
+  if (items.length === 0) {
+    el.innerHTML = '<span class="admin-quick-stat admin-quick-stat-ok">Tout est à jour ✓</span>';
+    return;
+  }
+  el.innerHTML = items.map((i) => `<span class="admin-quick-stat">${i.n} ${i.label}</span>`).join('');
+}
+
+/* ---------------------------------------------------------
+   Candidatures
+   --------------------------------------------------------- */
+let ranksByKey = null;
+async function getRanksByKey() {
+  if (ranksByKey) return ranksByKey;
+  ranksByKey = {};
+  try {
+    const res = await fetch('/api/leaderboard');
+    const data = await res.json();
+    (data.ranks || []).forEach((r) => { ranksByKey[r.key] = r; });
+  } catch { /* ignore */ }
+  return ranksByKey;
+}
+
+const APP_STATUS_LABELS = { pending: 'En attente', accepted: 'Acceptée', rejected: 'Rejetée' };
+
+async function loadAdminApplications() {
+  const list = $('#adminApplicationsList');
+  try {
+    const [res, ranks] = await Promise.all([fetch('/api/admin/applications'), getRanksByKey()]);
+    const data = await res.json();
+    const applications = data.applications || [];
+    pendingCounts.applications = applications.filter((a) => (a.status || 'pending') === 'pending').length;
+    setPanelCount('#adminAppsCount', pendingCounts.applications);
+    renderQuickStats();
+
+    if (applications.length === 0) {
+      list.innerHTML = '<p class="admin-empty">Aucune candidature pour le moment.</p>';
+      return;
+    }
+
+    list.innerHTML = applications.map((a) => {
+      const status = a.status || 'pending';
+      const rank = ranks[a.rankKey] || { label: 'Non classé', color: '#6c7086' };
+      return `
+        <div class="app-card" data-id="${a.id}">
+          <div class="app-card-top">
+            <div class="app-card-identity">
+              <strong>${escapeHtml(a.pseudo)}</strong>
+              <span class="rank-chip" style="color:${rank.color}">${escapeHtml(rank.label)}</span>
+            </div>
+            <span class="admin-status-badge ${status}">${APP_STATUS_LABELS[status] || status}</span>
+          </div>
+          <div class="app-card-meta">
+            <span>Epic : ${escapeHtml(a.epicUsername)}</span>
+            ${a.availability ? `<span>Dispo : ${escapeHtml(a.availability)}</span>` : ''}
+            <span>${new Date(a.createdAt).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
+          </div>
+          ${a.message ? `<p class="app-card-message">${escapeHtml(a.message)}</p>` : ''}
+          <div class="app-card-actions">
+            <button class="btn btn-ghost app-accept-btn" ${status === 'accepted' ? 'disabled' : ''}>Accepter</button>
+            <button class="btn btn-ghost app-reject-btn" ${status === 'rejected' ? 'disabled' : ''}>Rejeter</button>
+            <button class="btn btn-ghost app-delete-btn">Supprimer</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    list.querySelectorAll('.app-accept-btn').forEach((btn) => {
+      btn.addEventListener('click', () => moderateApplication(btn.closest('.app-card').dataset.id, 'accept'));
+    });
+    list.querySelectorAll('.app-reject-btn').forEach((btn) => {
+      btn.addEventListener('click', () => moderateApplication(btn.closest('.app-card').dataset.id, 'reject'));
+    });
+    list.querySelectorAll('.app-delete-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (!confirm('Supprimer définitivement cette candidature ?')) return;
+        moderateApplication(btn.closest('.app-card').dataset.id, 'delete');
+      });
+    });
+  } catch {
+    list.innerHTML = '<p class="admin-empty">Erreur de chargement.</p>';
+  }
+}
+
+async function moderateApplication(id, action) {
+  try {
+    const res = await fetch('/api/admin/applications', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, action }),
+    });
+    if (!res.ok) return;
+    const labels = { accept: 'Candidature acceptée.', reject: 'Candidature rejetée.', delete: 'Candidature supprimée.' };
+    if (window.showToast) window.showToast(labels[action] || 'Mis à jour.', 'success');
+    loadAdminApplications();
+  } catch { /* silencieux */ }
+}
+
+/* ---------------------------------------------------------
    Modération des clips
    --------------------------------------------------------- */
 async function loadAdminClips() {
@@ -32,6 +153,9 @@ async function loadAdminClips() {
     const res = await fetch('/api/admin/clips');
     const data = await res.json();
     const clips = data.clips || [];
+    pendingCounts.clips = clips.filter((c) => c.status === 'pending').length;
+    setPanelCount('#adminClipsCount', pendingCounts.clips);
+    renderQuickStats();
     if (clips.length === 0) {
       list.innerHTML = '<p class="admin-empty">Aucun clip soumis pour le moment.</p>';
       return;
@@ -434,6 +558,7 @@ $('#saveCompetitionBtn').addEventListener('click', async () => {
     return;
   }
   $('#adminContent').classList.remove('hidden');
+  loadAdminApplications();
   loadAdminClips();
   loadAdminRoles();
   loadAdminRoster();

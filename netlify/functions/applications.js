@@ -31,6 +31,7 @@ export default async (req) => {
     rankKey,
     availability,
     message,
+    status: 'pending',
     createdAt: Date.now(),
   };
   await applicationsStore().set(id, JSON.stringify(application));

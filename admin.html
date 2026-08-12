@@ -37,6 +37,7 @@
   <section class="admin-hero">
     <p class="eyebrow">Réservé au staff</p>
     <h1 class="section-title">Panel admin</h1>
+    <div class="admin-quick-stats" id="adminQuickStats"></div>
   </section>
 
   <div id="adminDenied" class="admin-denied hidden">
@@ -45,17 +46,42 @@
 
   <div id="adminContent" class="admin-content hidden">
 
+    <nav class="admin-quick-nav">
+      <a href="#panel-applications">Candidatures</a>
+      <a href="#panel-clips">Clips</a>
+      <a href="#panel-roles">Rôles</a>
+      <a href="#panel-roster">Rosters</a>
+      <a href="#panel-competition-events">Compétition</a>
+    </nav>
+
+    <!-- ============ CANDIDATURES ============ -->
+    <section class="admin-panel admin-panel-gold" id="panel-applications">
+      <div class="admin-panel-head">
+        <h2 class="admin-panel-title">Candidatures</h2>
+        <span class="admin-panel-count hidden" id="adminAppsCount"></span>
+      </div>
+      <p class="admin-panel-sub">Envoyées depuis la page « Candidater ».</p>
+      <div id="adminApplicationsList" class="admin-apps-list">
+        <p class="admin-empty">Chargement…</p>
+      </div>
+    </section>
+
     <!-- ============ MODÉRATION DES CLIPS ============ -->
-    <section class="admin-panel">
-      <h2 class="admin-panel-title">Modération des clips</h2>
+    <section class="admin-panel admin-panel-cyan" id="panel-clips">
+      <div class="admin-panel-head">
+        <h2 class="admin-panel-title">Modération des clips</h2>
+        <span class="admin-panel-count hidden" id="adminClipsCount"></span>
+      </div>
       <div id="adminClipsList" class="admin-clips-list">
         <p class="admin-empty">Chargement…</p>
       </div>
     </section>
 
     <!-- ============ VÉRIFICATION DES RÔLES ============ -->
-    <section class="admin-panel">
-      <h2 class="admin-panel-title">Vérification des rôles des membres</h2>
+    <section class="admin-panel admin-panel-nebula" id="panel-roles">
+      <div class="admin-panel-head">
+        <h2 class="admin-panel-title">Vérification des rôles des membres</h2>
+      </div>
       <p class="admin-panel-sub">Confirme que le rôle en jeu déclaré par chaque membre correspond bien à la réalité de l'équipe.</p>
       <div id="adminRolesList" class="admin-roles-list">
         <p class="admin-empty">Chargement…</p>
@@ -63,8 +89,10 @@
     </section>
 
     <!-- ============ GESTION DES ROSTERS ============ -->
-    <section class="admin-panel">
-      <h2 class="admin-panel-title">Gestion des rosters</h2>
+    <section class="admin-panel admin-panel-nebula" id="panel-roster">
+      <div class="admin-panel-head">
+        <h2 class="admin-panel-title">Gestion des rosters</h2>
+      </div>
       <p class="admin-panel-sub">Ajoute, modifie ou supprime les divisions affichées sur la page Roster.</p>
       <div id="adminRosterList" class="admin-roster-list">
         <p class="admin-empty">Chargement…</p>
@@ -77,8 +105,10 @@
     </section>
 
     <!-- ============ GESTION DE LA COMPÉTITION ============ -->
-    <section class="admin-panel">
-      <h2 class="admin-panel-title">Compétition — prochains matchs</h2>
+    <section class="admin-panel admin-panel-gold" id="panel-competition-events">
+      <div class="admin-panel-head">
+        <h2 class="admin-panel-title">Compétition — prochains matchs</h2>
+      </div>
       <p class="admin-panel-sub">Pilote le compte à rebours et le calendrier de la page Compétition (nom, date, heure, note).</p>
       <div id="adminEventsList" class="admin-comp-list">
         <p class="admin-empty">Chargement…</p>
@@ -88,8 +118,10 @@
       </div>
     </section>
 
-    <section class="admin-panel">
-      <h2 class="admin-panel-title">Compétition — résultats</h2>
+    <section class="admin-panel admin-panel-gold" id="panel-competition-results">
+      <div class="admin-panel-head">
+        <h2 class="admin-panel-title">Compétition — résultats</h2>
+      </div>
       <p class="admin-panel-sub">Ajoute ou modifie les scores des matchs joués — victoires/défaites, taux de victoire, série en cours et forme sur 5 matchs se recalculent automatiquement à partir des scores.</p>
       <div id="adminMatchesList" class="admin-comp-list">
         <p class="admin-empty">Chargement…</p>

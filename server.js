@@ -39,6 +39,7 @@ const ROUTE_TABLE = [
   ['/api/admin/verify-role', 'admin-verify-role.js'],
   ['/api/admin/set-role', 'admin-set-role.js'],
   ['/api/admin/set-staff-role', 'admin-set-staff-role.js'],
+  ['/api/admin/applications', 'admin-applications.js'],
   ['/api/admin/set-admin', 'admin-set-admin.js'],
 ];
 
