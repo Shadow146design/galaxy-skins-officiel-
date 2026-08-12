@@ -14,6 +14,8 @@ function escapeHtml(str) {
 }
 
 let CLIPS = [];
+let visibleClips = [];
+let clipsQuery = '';
 
 const featuredVideo = $('#featuredVideo');
 const featuredTitle = $('#featuredTitle');
@@ -26,8 +28,16 @@ const replayEmpty = $('#replayEmpty');
 
 let activeIndex = 0;
 
+function computeVisibleClips() {
+  if (!clipsQuery) { visibleClips = CLIPS; return; }
+  const q = clipsQuery.toLowerCase();
+  visibleClips = CLIPS.filter((c) =>
+    c.title.toLowerCase().includes(q) || (c.submitterUsername || '').toLowerCase().includes(q)
+  );
+}
+
 function playClip(index, autoplay) {
-  const clip = CLIPS[index];
+  const clip = visibleClips[index];
   if (!clip) return;
   activeIndex = index;
 
@@ -35,7 +45,7 @@ function playClip(index, autoplay) {
   featuredVideo.src = clip.videoUrl;
   featuredTitle.textContent = clip.title;
   featuredDesc.textContent = clip.desc || `Envoyé par ${clip.submitterUsername}`;
-  replayCounter.textContent = `${String(index + 1).padStart(2, '0')} / ${String(CLIPS.length).padStart(2, '0')}`;
+  replayCounter.textContent = `${String(index + 1).padStart(2, '0')} / ${String(visibleClips.length).padStart(2, '0')}`;
 
   filmstripTrack.querySelectorAll('.film-card').forEach((card, i) => {
     card.classList.toggle('active', i === index);
@@ -45,17 +55,27 @@ function playClip(index, autoplay) {
 }
 
 function renderFilmstrip() {
+  computeVisibleClips();
+
   if (CLIPS.length === 0) {
     replayStage.style.display = 'none';
     filmstripWrap.style.display = 'none';
     replayEmpty.style.display = 'block';
+    replayEmpty.textContent = 'Aucun clip pour le moment — les reprises vidéo de chaque but arriveront ici au fil des matchs.';
+    return;
+  }
+  if (visibleClips.length === 0) {
+    replayStage.style.display = 'none';
+    filmstripWrap.style.display = 'none';
+    replayEmpty.style.display = 'block';
+    replayEmpty.textContent = 'Aucun clip ne correspond à ta recherche.';
     return;
   }
   replayStage.style.display = '';
   filmstripWrap.style.display = '';
   replayEmpty.style.display = 'none';
 
-  filmstripTrack.innerHTML = CLIPS.map((c, i) => `
+  filmstripTrack.innerHTML = visibleClips.map((c, i) => `
     <article class="film-card${i === 0 ? ' active' : ''}" data-index="${i}">
       <div class="film-sprockets">${'<span></span>'.repeat(8)}</div>
       <div class="film-thumb">
@@ -87,6 +107,14 @@ async function loadClips() {
   renderFilmstrip();
 }
 loadClips();
+
+const clipsSearchInput = $('#clipsSearchInput');
+if (clipsSearchInput) {
+  clipsSearchInput.addEventListener('input', () => {
+    clipsQuery = clipsSearchInput.value.trim();
+    renderFilmstrip();
+  });
+}
 
 /* ---------------------------------------------------------
    Formulaire de soumission — visible seulement connecté.

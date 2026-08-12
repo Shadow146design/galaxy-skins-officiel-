@@ -8,9 +8,14 @@ function redirectToHome(cookies = []) {
   return new Response(null, { status: 302, headers });
 }
 
-function redirectToError() {
-  return new Response(null, { status: 302, headers: new Headers({ Location: '/?discord_error=1' }) });
+function redirectToError(reason = '1') {
+  return new Response(null, { status: 302, headers: new Headers({ Location: `/?discord_error=${reason}` }) });
 }
+
+const CLEAR_OAUTH_COOKIES = [
+  'gs_oauth_state=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0',
+  'gs_oauth_link_user=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0',
+];
 
 async function uniqueUsernameFrom(base) {
   const usernameIndex = usernameIndexStore();
@@ -62,6 +67,30 @@ export default async (req) => {
 
     const discordIndex = discordIndexStore();
     const usersStoreRef = usersStore();
+
+    // Mode "lier mon compte Discord" : l'utilisateur était déjà connecté
+    // quand il a lancé le flux OAuth (voir auth-discord.js) — on lie ce
+    // compte Discord à SON compte existant plutôt que d'en chercher/créer
+    // un autre à partir du discordId.
+    if (cookies.gs_oauth_link_user) {
+      const linkUserId = cookies.gs_oauth_link_user;
+      const raw = await usersStoreRef.get(linkUserId);
+      if (!raw) return redirectToError();
+      const user = JSON.parse(raw);
+
+      const existingOwnerId = await discordIndex.get(discordUser.id);
+      if (existingOwnerId && existingOwnerId !== user.id) {
+        return redirectToError('already_linked');
+      }
+
+      user.discordId = discordUser.id;
+      await usersStoreRef.set(user.id, JSON.stringify(user));
+      await discordIndex.set(discordUser.id, user.id);
+
+      const token = await createSession(user.id);
+      return redirectToHome([sessionCookie(token), ...CLEAR_OAUTH_COOKIES]);
+    }
+
     let userId = await discordIndex.get(discordUser.id);
     let user;
 
@@ -92,8 +121,7 @@ export default async (req) => {
     }
 
     const token = await createSession(user.id);
-    const clearState = 'gs_oauth_state=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0';
-    return redirectToHome([sessionCookie(token), clearState]);
+    return redirectToHome([sessionCookie(token), ...CLEAR_OAUTH_COOKIES]);
   } catch {
     return redirectToError();
   }

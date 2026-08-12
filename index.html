@@ -382,6 +382,11 @@
       <p class="form-hint">Modérateur, Admin et Créateur sont attribués uniquement par le staff.</p>
     </div>
 
+    <div class="discord-link-missing" id="discordLinkMissing">
+      <p class="form-hint">Ton compte n'est pas lié à Discord — lie-le pour pouvoir te reconnecter sans mot de passe si jamais tu l'oublies.</p>
+      <a class="btn btn-ghost" href="/api/auth/discord?link=1">Lier mon compte Discord</a>
+    </div>
+
     <div class="epic-missing" id="epicMissing">
       <p class="form-hint">Ton compte est lié à Discord mais n'a pas encore de pseudo Epic Games — ajoute-le pour apparaître dans le classement.</p>
       <div class="manual-rank-row">
@@ -400,6 +405,16 @@
         <select id="manualRankSelect"></select>
         <button class="btn btn-ghost" id="manualRankBtn">Valider</button>
       </div>
+    </details>
+
+    <details class="manual-rank">
+      <summary>Changer mon mot de passe</summary>
+      <form id="passwordForm" class="password-form">
+        <input type="password" id="currentPasswordInput" placeholder="Mot de passe actuel" autocomplete="current-password">
+        <input type="password" id="newPasswordInput" placeholder="Nouveau mot de passe (6 caractères min.)" autocomplete="new-password" required minlength="6">
+        <button type="submit" class="btn btn-ghost">Valider</button>
+      </form>
+      <p class="form-error" id="passwordError"></p>
     </details>
 
     <button class="btn btn-ghost btn-block logout-btn" id="logoutBtn">Se déconnecter</button>

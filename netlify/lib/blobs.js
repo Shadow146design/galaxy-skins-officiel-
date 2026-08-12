@@ -72,6 +72,10 @@ function makeStore(name) {
   };
 }
 
+// Accès direct au client Redis — utilisé par lib/rateLimit.js (compteurs
+// avec expiration), en dehors de l'abstraction get/set/list ci-dessus.
+export const redisClient = redis;
+
 export const usersStore = () => makeStore('users');
 export const usernameIndexStore = () => makeStore('usernames');
 export const discordIndexStore = () => makeStore('discord-ids');

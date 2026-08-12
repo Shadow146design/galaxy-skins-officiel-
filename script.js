@@ -373,6 +373,10 @@ function openProfileModal() {
   ).join('');
 
   $('#epicMissing').classList.toggle('show', !currentUser.epicUsername);
+  $('#discordLinkMissing').classList.toggle('show', !currentUser.hasDiscordLinked);
+  $('#currentPasswordInput').classList.toggle('hidden', !currentUser.hasPassword);
+  $('#passwordError').textContent = '';
+  $('#passwordForm').reset();
   $('#roleSelect').value = currentUser.role || 'Non défini';
 
   // Modérateur/Admin/Créateur ne sont attribuables que par le staff : si le
@@ -489,6 +493,27 @@ $('#saveStaffRoleBtn').addEventListener('click', async () => {
   } catch { /* silencieux */ }
 });
 
+$('#passwordForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const errEl = $('#passwordError');
+  errEl.textContent = '';
+  const newPassword = $('#newPasswordInput').value;
+  const currentPassword = $('#currentPasswordInput').value;
+  try {
+    const res = await fetch('/api/profile/password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ currentPassword, newPassword }),
+    });
+    const data = await res.json();
+    if (!res.ok) { errEl.textContent = data.error || 'Erreur.'; return; }
+    $('#passwordForm').reset();
+    showToast('Mot de passe mis à jour.', 'success');
+  } catch {
+    errEl.textContent = 'Erreur réseau. Réessaie.';
+  }
+});
+
 $('#saveEpicBtn').addEventListener('click', async () => {
   const input = $('#epicUsernameInput');
   const errEl = $('#epicError');
@@ -580,9 +605,13 @@ async function bootstrapAuth() {
   }
 }
 
-if (new URLSearchParams(window.location.search).get('discord_error')) {
+const discordErrorReason = new URLSearchParams(window.location.search).get('discord_error');
+if (discordErrorReason) {
   window.addEventListener('load', () => {
-    showToast("La connexion via Discord a échoué. Réessaie, ou connecte-toi avec pseudo / mot de passe.", 'error');
+    const message = discordErrorReason === 'already_linked'
+      ? 'Ce compte Discord est déjà lié à un autre compte du site.'
+      : 'La connexion via Discord a échoué. Réessaie, ou connecte-toi avec pseudo / mot de passe.';
+    showToast(message, 'error');
   });
 }
 

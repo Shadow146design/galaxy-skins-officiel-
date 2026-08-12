@@ -29,6 +29,7 @@ const ROUTE_TABLE = [
   ['/api/profile/role', 'profile-role.js'],
   ['/api/profile/staff-role', 'profile-staff-role.js'],
   ['/api/notifications/read', 'notifications-read.js'],
+  ['/api/profile/password', 'profile-password.js'],
   ['/api/profile/avatar', 'profile-avatar.js'],
   ['/api/avatar', 'avatar.js'],
   ['/api/rank/refresh', 'rank-refresh.js'],
@@ -41,6 +42,7 @@ const ROUTE_TABLE = [
   ['/api/admin/set-role', 'admin-set-role.js'],
   ['/api/admin/set-staff-role', 'admin-set-staff-role.js'],
   ['/api/admin/applications', 'admin-applications.js'],
+  ['/api/admin/reset-password', 'admin-reset-password.js'],
   ['/api/admin/set-admin', 'admin-set-admin.js'],
 ];
 

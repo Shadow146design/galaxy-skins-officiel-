@@ -242,7 +242,7 @@
   border: 1px solid var(--line);
   border-radius: 12px;
 }
-.admin-event-row { grid-template-columns: 1.6fr 1fr .8fr 1.2fr auto; }
+.admin-event-row { grid-template-columns: 1.4fr .9fr .7fr 1fr 1.1fr auto; }
 .admin-match-row { grid-template-columns: 1fr 1.4fr 60px auto 60px auto auto; }
 .admin-comp-row input {
   background: var(--void);

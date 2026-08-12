@@ -62,7 +62,6 @@ manquants`) tant qu'elles ne sont pas configurées.
 | `DISCORD_REDIRECT_URI` | Optionnel | Par défaut `https://<ton-service>.onrender.com/api/auth/discord/callback`. À renseigner uniquement si tu utilises un domaine personnalisé. |
 | `TRACKER_GG_API_KEY` | Optionnel | Clé d'API [tracker.gg](https://tracker.gg/developers) pour fiabiliser la récupération automatique des rangs (voir limite ci-dessous). |
 | `DISCORD_APPLICATIONS_WEBHOOK` | Optionnel | Webhook Discord pour recevoir les candidatures (`/rejoindre`) directement dans un salon. |
-| `ADMIN_TOKEN` | Optionnel | Jeton secret pour basculer le bandeau "match en cours" (voir plus bas). |
 
 ### Configurer Discord OAuth
 
@@ -99,18 +98,19 @@ Discord ni de variable d'environnement : la liste est codée en dur, à modifier
 directement dans ce fichier si l'équipe change.
 
 Le panel permet :
-- de basculer le bandeau "match en cours" (remplace l'usage manuel via curl —
-  toujours possible avec `ADMIN_TOKEN` en plus, si besoin d'un accès scripté) ;
+- de valider, rejeter ou supprimer les candidatures (`/rejoindre`) — le candidat
+  reçoit une notification sur son profil s'il est accepté ;
 - de valider ou rejeter les clips soumis par les membres ;
-- de marquer le rôle en jeu d'un membre comme "vérifié".
-
-```bash
-# Toujours possible en scripté, en plus du panel :
-curl -X POST https://<ton-site>.netlify.app/api/live-match \
-  -H "Content-Type: application/json" \
-  -H "X-Admin-Token: <valeur de ADMIN_TOKEN>" \
-  -d '{"isLive": true, "opponent": "Team Adverse", "streamUrl": "https://twitch.tv/galaxysinks", "note": "BO5"}'
-```
+- de marquer le rôle en jeu d'un membre comme "vérifié", et de lui attribuer un
+  poste (Staff/Admin/Modérateur/...) ;
+- d'ajouter/modifier/supprimer les divisions du roster ;
+- de gérer le calendrier de la Compétition (événements à venir, résultats) —
+  le bandeau "match en cours" affiché sur tout le site en est directement
+  dérivé (actif automatiquement pendant les 3h suivant l'heure d'un événement,
+  aucune bascule manuelle à faire) ;
+- de réinitialiser le mot de passe d'un membre qui l'a perdu (aucun système
+  d'email : le mot de passe temporaire généré est à communiquer soi-même,
+  par exemple sur Discord).
 
 ## Photo de profil
 

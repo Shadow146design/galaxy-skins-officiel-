@@ -18,6 +18,8 @@ export async function toPublicUser(user) {
     staffRole: user.staffRole || 'Membre',
     badges: user.badges || [],
     notifications: user.notifications || [],
+    hasDiscordLinked: Boolean(user.discordId),
+    hasPassword: Boolean(user.passwordHash),
     position,
     avatarUrl: user.avatarUpdatedAt ? `/api/avatar?id=${user.id}&v=${user.avatarUpdatedAt}` : null,
     isAdmin: isAdminUser(user),

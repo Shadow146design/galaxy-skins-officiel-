@@ -3,6 +3,7 @@ import { applicationsStore } from '../lib/blobs.js';
 import { getSessionUser } from '../lib/session.js';
 import { jsonResponse, errorResponse } from '../lib/response.js';
 import { isValidRankKey } from '../lib/ranks.js';
+import { rateLimit } from '../lib/rateLimit.js';
 
 export default async (req) => {
   if (req.method !== 'POST') return errorResponse('Méthode non autorisée.', 405);
@@ -11,6 +12,9 @@ export default async (req) => {
   // sa candidature est acceptée (voir admin-applications.js).
   const session = await getSessionUser(req);
   if (!session) return errorResponse('Connecte-toi pour candidater.', 401);
+
+  const allowed = await rateLimit(`application:${session.user.id}`, { limit: 3, windowSeconds: 86400 });
+  if (!allowed) return errorResponse('Tu as déjà envoyé plusieurs candidatures récemment. Réessaie plus tard.', 429);
 
   let body;
   try {

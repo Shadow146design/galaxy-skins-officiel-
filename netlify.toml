@@ -86,6 +86,11 @@
   status = 200
 
 [[redirects]]
+  from = "/api/profile/password"
+  to = "/.netlify/functions/profile-password"
+  status = 200
+
+[[redirects]]
   from = "/api/profile/staff-role"
   to = "/.netlify/functions/profile-staff-role"
   status = 200
@@ -148,6 +153,11 @@
 [[redirects]]
   from = "/api/admin/applications"
   to = "/.netlify/functions/admin-applications"
+  status = 200
+
+[[redirects]]
+  from = "/api/admin/reset-password"
+  to = "/.netlify/functions/admin-reset-password"
   status = 200
 
 [[redirects]]

@@ -233,6 +233,7 @@ async function loadAdminRoles() {
           <input type="checkbox" class="admin-is-admin-checkbox" ${u.isAdmin ? 'checked' : ''} ${u.isAdminHardcoded ? 'disabled' : ''}>
           Admin
         </label>
+        <button type="button" class="btn btn-ghost admin-reset-password-btn">Réinitialiser mdp</button>
       </div>
     `).join('');
 
@@ -285,6 +286,27 @@ async function loadAdminRoles() {
           });
           if (window.showToast) window.showToast('Statut de vérification mis à jour.', 'success');
         } catch { /* silencieux */ }
+      });
+    });
+
+    list.querySelectorAll('.admin-reset-password-btn').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const row = btn.closest('.admin-role-row');
+        const userId = row.dataset.id;
+        const username = row.querySelector('strong').textContent;
+        if (!confirm(`Générer un nouveau mot de passe pour ${username} ? L'ancien ne fonctionnera plus.`)) return;
+        try {
+          const res = await fetch('/api/admin/reset-password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId }),
+          });
+          const data = await res.json();
+          if (!res.ok) { if (window.showToast) window.showToast(data.error || 'Erreur.', 'error'); return; }
+          alert(`Nouveau mot de passe pour ${data.username} :\n\n${data.tempPassword}\n\nCommunique-le-lui toi-même (il ne sera plus jamais affiché) — il pourra le changer ensuite depuis son profil.`);
+        } catch {
+          if (window.showToast) window.showToast('Erreur réseau.', 'error');
+        }
       });
     });
 
@@ -418,6 +440,7 @@ function readEventsDraftFromDom() {
     name: row.querySelector('.event-name-input').value,
     date: `${row.querySelector('.event-date-input').value}T${row.querySelector('.event-time-input').value || '00:00'}`,
     note: row.querySelector('.event-note-input').value,
+    streamUrl: row.querySelector('.event-stream-input').value,
   }));
 }
 
@@ -435,6 +458,7 @@ function renderEventsEditor() {
         <input type="date" class="event-date-input" value="${escapeHtml(datePart || '')}">
         <input type="time" class="event-time-input" value="${escapeHtml((timePart || '').slice(0, 5))}">
         <input type="text" class="event-note-input" placeholder="Note (optionnel)" value="${escapeHtml(e.note || '')}">
+        <input type="url" class="event-stream-input" placeholder="Lien du stream (optionnel)" value="${escapeHtml(e.streamUrl || '')}">
         <button type="button" class="btn btn-ghost admin-comp-delete-btn" title="Supprimer">✕</button>
       </div>
     `;
@@ -518,7 +542,7 @@ async function loadAdminCompetition() {
 
 $('#addEventBtn').addEventListener('click', () => {
   readEventsDraftFromDom();
-  eventsDraft.push({ name: '', date: '', note: '' });
+  eventsDraft.push({ name: '', date: '', note: '', streamUrl: '' });
   renderEventsEditor();
 });
 

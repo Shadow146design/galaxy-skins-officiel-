@@ -6,9 +6,13 @@ import { jsonResponse, errorResponse } from '../lib/response.js';
 import { toPublicUser } from '../lib/user.js';
 import { fetchTrackerRank } from '../lib/tracker.js';
 import { isValidRankKey } from '../lib/ranks.js';
+import { rateLimit, clientIp } from '../lib/rateLimit.js';
 
 export default async (req) => {
   if (req.method !== 'POST') return errorResponse('Méthode non autorisée.', 405);
+
+  const allowed = await rateLimit(`register:${clientIp(req)}`, { limit: 5, windowSeconds: 3600 });
+  if (!allowed) return errorResponse('Trop de tentatives d\'inscription. Réessaie dans une heure.', 429);
 
   let body;
   try {

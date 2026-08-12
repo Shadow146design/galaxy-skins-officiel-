@@ -3,9 +3,15 @@ import { verifyPassword } from '../lib/password.js';
 import { createSession, sessionCookie } from '../lib/session.js';
 import { jsonResponse, errorResponse } from '../lib/response.js';
 import { toPublicUser } from '../lib/user.js';
+import { rateLimit, clientIp } from '../lib/rateLimit.js';
 
 export default async (req) => {
   if (req.method !== 'POST') return errorResponse('Méthode non autorisée.', 405);
+
+  // Anti brute-force : limite large (les faux positifs sur IP partagée sont
+  // pires qu'un peu de marge) mais suffisante pour dissuader un script.
+  const allowed = await rateLimit(`login:${clientIp(req)}`, { limit: 20, windowSeconds: 900 });
+  if (!allowed) return errorResponse('Trop de tentatives de connexion. Réessaie dans 15 minutes.', 429);
 
   let body;
   try {
