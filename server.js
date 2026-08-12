@@ -30,6 +30,7 @@ const ROUTE_TABLE = [
   ['/api/profile/staff-role', 'profile-staff-role.js'],
   ['/api/notifications/read', 'notifications-read.js'],
   ['/api/profile/password', 'profile-password.js'],
+  ['/api/profile/delete', 'profile-delete.js'],
   ['/api/profile/avatar', 'profile-avatar.js'],
   ['/api/avatar', 'avatar.js'],
   ['/api/rank/refresh', 'rank-refresh.js'],

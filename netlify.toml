@@ -91,6 +91,11 @@
   status = 200
 
 [[redirects]]
+  from = "/api/profile/delete"
+  to = "/.netlify/functions/profile-delete"
+  status = 200
+
+[[redirects]]
   from = "/api/profile/staff-role"
   to = "/.netlify/functions/profile-staff-role"
   status = 200

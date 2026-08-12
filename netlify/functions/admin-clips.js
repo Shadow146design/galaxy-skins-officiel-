@@ -2,6 +2,7 @@ import { clipsMetaStore } from '../lib/blobs.js';
 import { getSessionUser } from '../lib/session.js';
 import { isAdminUser } from '../lib/admin.js';
 import { jsonResponse, errorResponse } from '../lib/response.js';
+import { pushNotification } from '../lib/notifications.js';
 
 async function requireAdmin(req) {
   const session = await getSessionUser(req);
@@ -44,6 +45,13 @@ export default async (req) => {
     clip.moderatedBy = session.user.username;
     clip.moderatedAt = Date.now();
     await store.set(clip.id, JSON.stringify(clip));
+
+    await pushNotification(clip.submitterUserId, {
+      message: body.action === 'approve'
+        ? `Ton clip « ${clip.title} » a été validé et est maintenant visible sur la page Clips !`
+        : `Ton clip « ${clip.title} » n'a pas été retenu par le staff.`,
+      url: body.action === 'approve' ? '/clips' : '',
+    });
 
     return jsonResponse({ ok: true, clip });
   }

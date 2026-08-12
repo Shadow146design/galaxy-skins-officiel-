@@ -60,5 +60,21 @@ export default async (req) => {
   await clipsVideoStore().set(id, buffer, { metadata: { mimeType } });
   await clipsMetaStore().set(id, JSON.stringify(clip));
 
+  // Notification optionnelle au staff via un webhook Discord.
+  const webhookUrl = process.env.DISCORD_CLIPS_WEBHOOK;
+  if (webhookUrl) {
+    try {
+      await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          content: `🎬 Nouveau clip à modérer — **${title}** par ${user.username}`,
+        }),
+      });
+    } catch {
+      // le clip reste enregistré même si la notification échoue
+    }
+  }
+
   return jsonResponse({ ok: true, clip });
 };

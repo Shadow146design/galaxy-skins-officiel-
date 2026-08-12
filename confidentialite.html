@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confidentialité — Galaxy Sinks™</title>
+<meta name="description" content="Quelles données Galaxy Sinks™ collecte, pourquoi, et comment les faire supprimer.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#05060f">
+<link rel="icon" type="image/png" href="/gs-logo.png">
+<link rel="apple-touch-icon" href="/gs-logo.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="pages.css">
+<link rel="stylesheet" href="interactions.css">
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+<div class="live-banner" id="liveBanner"><span class="live-banner-dot"></span><span id="liveBannerText"></span></div>
+
+<header class="topbar" id="topbar">
+  <a class='brand' href='/'>
+    <span class="brand-mark">
+      <img src="/gs-logo.png" alt="Galaxy Sinks" width="30" height="30">
+    </span>
+    <span class="brand-text">GALAXY SINKS<sup>™</sup></span>
+  </a>
+
+  <nav class="nav" id="mainNav">
+    <a href='/#histoire'>Histoire</a>
+    <a href='/roster'>Roster</a>
+    <a href='/competition'>Compétition</a>
+    <a href='/#classement'>Classement</a>
+    <a href='/boutique'>Boutique</a>
+    <a href='/clips'>Clips</a>
+    <a class='nav-highlight' href='/rejoindre'>Candidater</a>
+    <a href='/#contact'>Contact</a>
+  </nav>
+
+  <div class="nav-auth">
+    <a class='btn btn-ghost' href='/#top'>← Retour au site</a>
+  </div>
+
+  <button class="nav-burger" id="navBurger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<main>
+  <section class="page-hero">
+    <p class="eyebrow">Données personnelles</p>
+    <h1 class="page-hero-title">Confidentialité</h1>
+    <p class="page-hero-sub">Ce que Galaxy Sinks™ enregistre sur toi quand tu utilises ce site, pourquoi, et comment y accéder ou le faire supprimer.</p>
+  </section>
+
+  <section class="page-section legal-content">
+
+    <h2>Qui gère ces données ?</h2>
+    <p>
+      Galaxy Sinks™, structure associative en cours de formalisation (SIREN en cours).
+      Pour toute question ou demande, contact :
+      <a href="mailto:galaxy.sinks8@gmail.com">galaxy.sinks8@gmail.com</a>.
+    </p>
+
+    <h2>Quelles données sont collectées ?</h2>
+    <ul>
+      <li><strong>Compte</strong> — pseudo, pseudo Epic Games, mot de passe (jamais stocké en clair, uniquement son empreinte cryptographique salée), et l'identifiant Discord si tu connectes ou lies ton compte Discord.</li>
+      <li><strong>Profil</strong> — photo de profil (si tu en ajoutes une), rang Rocket League, rôle en jeu, poste dans l'organisation.</li>
+      <li><strong>Contenu que tu soumets</strong> — candidatures (pseudo, disponibilités, message) et clips vidéo envoyés pour modération.</li>
+      <li><strong>Technique</strong> — un cookie de session (nécessaire pour rester connecté, pas de traceur publicitaire), et l'adresse IP le temps d'une requête pour limiter les abus (inscriptions ou candidatures en masse).</li>
+    </ul>
+    <p>Aucune donnée n'est vendue, partagée avec un tiers à des fins commerciales, ni utilisée pour de la publicité.</p>
+
+    <h2>Pourquoi ces données ?</h2>
+    <p>
+      Uniquement pour faire fonctionner le site : créer et sécuriser ton compte, afficher le
+      classement et le roster, gérer les candidatures et la modération des clips, et te
+      prévenir sur ton profil des décisions qui te concernent (candidature acceptée, clip
+      validé...).
+    </p>
+
+    <h2>Où sont-elles stockées ?</h2>
+    <p>
+      Sur une base de données Upstash (Redis), hébergée dans l'Union européenne quand ce
+      choix de région est disponible, et servie par notre hébergeur applicatif (Render).
+      Les vidéos de clips sont stockées avec le reste des données.
+    </p>
+
+    <h2>Combien de temps sont-elles conservées ?</h2>
+    <p>
+      Tant que ton compte existe. Les candidatures et clips déjà publiés restent dans
+      l'historique du site (avec le pseudo utilisé à l'époque) même après suppression du
+      compte qui les a soumis, comme sur la plupart des forums et communautés.
+    </p>
+
+    <h2>Tes droits</h2>
+    <p>Conformément au RGPD, tu peux à tout moment :</p>
+    <ul>
+      <li><strong>Voir et corriger</strong> tes informations depuis « Mon profil » sur le site.</li>
+      <li><strong>Supprimer ton compte</strong> toi-même, depuis « Mon profil » → « Supprimer mon compte ».</li>
+      <li><strong>Demander l'accès, la rectification ou la suppression</strong> de données que tu ne peux pas modifier toi-même en écrivant à <a href="mailto:galaxy.sinks8@gmail.com">galaxy.sinks8@gmail.com</a>.</li>
+    </ul>
+
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span class="brand-text small">GALAXY SINKS<sup>™</sup></span>
+  <p>© 2026 Galaxy Sinks™ — Tous droits réservés.</p>
+  <p class="footer-legal">Responsable : INSANE · SIREN en cours · galaxy.sinks8@gmail.com</p>
+</footer>
+
+<script src="common.js"></script>
+<script src="interactions.js"></script>
+</body>
+</html>

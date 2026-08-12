@@ -1,29 +1,10 @@
-import { randomUUID } from 'node:crypto';
-import { applicationsStore, usersStore } from '../lib/blobs.js';
+import { applicationsStore } from '../lib/blobs.js';
 import { getSessionUser } from '../lib/session.js';
 import { isAdminUser } from '../lib/admin.js';
 import { jsonResponse, errorResponse } from '../lib/response.js';
+import { pushNotification } from '../lib/notifications.js';
 
 const DISCORD_INVITE_URL = 'https://discord.gg/qdvY4hEHqT';
-
-// Notifie le candidat sur son profil uniquement en cas d'acceptation — un
-// refus ne génère aucune notification (comportement voulu par le staff).
-async function notifyAccepted(userId) {
-  if (!userId) return;
-  const raw = await usersStore().get(userId);
-  if (!raw) return;
-  const user = JSON.parse(raw);
-  const notifications = user.notifications || [];
-  notifications.push({
-    id: randomUUID(),
-    message: 'Ta candidature pour rejoindre Galaxy Sinks™ a été acceptée ! Rejoins le serveur Discord pour la suite :',
-    url: DISCORD_INVITE_URL,
-    createdAt: Date.now(),
-    read: false,
-  });
-  user.notifications = notifications;
-  await usersStore().set(user.id, JSON.stringify(user));
-}
 
 async function requireAdmin(req) {
   const session = await getSessionUser(req);
@@ -74,7 +55,13 @@ export default async (req) => {
     application.moderatedAt = Date.now();
     await store.set(application.id, JSON.stringify(application));
 
-    if (body.action === 'accept') await notifyAccepted(application.userId);
+    // Un refus ne génère aucune notification (comportement voulu par le staff).
+    if (body.action === 'accept') {
+      await pushNotification(application.userId, {
+        message: 'Ta candidature pour rejoindre Galaxy Sinks™ a été acceptée ! Rejoins le serveur Discord pour la suite :',
+        url: DISCORD_INVITE_URL,
+      });
+    }
 
     return jsonResponse({ ok: true, application });
   }

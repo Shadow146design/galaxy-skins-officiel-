@@ -62,6 +62,7 @@ manquants`) tant qu'elles ne sont pas configurées.
 | `DISCORD_REDIRECT_URI` | Optionnel | Par défaut `https://<ton-service>.onrender.com/api/auth/discord/callback`. À renseigner uniquement si tu utilises un domaine personnalisé. |
 | `TRACKER_GG_API_KEY` | Optionnel | Clé d'API [tracker.gg](https://tracker.gg/developers) pour fiabiliser la récupération automatique des rangs (voir limite ci-dessous). |
 | `DISCORD_APPLICATIONS_WEBHOOK` | Optionnel | Webhook Discord pour recevoir les candidatures (`/rejoindre`) directement dans un salon. |
+| `DISCORD_CLIPS_WEBHOOK` | Optionnel | Webhook Discord pour être notifié qu'un clip attend une modération. |
 
 ### Configurer Discord OAuth
 

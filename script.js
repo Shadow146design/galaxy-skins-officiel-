@@ -586,6 +586,21 @@ $('#logoutBtn').addEventListener('click', async () => {
   loadLeaderboard();
 });
 
+$('#deleteAccountBtn').addEventListener('click', async () => {
+  if (!confirm(`Supprimer définitivement ton compte ${currentUser.username} ? Cette action est irréversible.`)) return;
+  try {
+    const res = await fetch('/api/profile/delete', { method: 'POST' });
+    if (!res.ok) { showToast('Erreur lors de la suppression. Réessaie.', 'error'); return; }
+    currentUser = null;
+    profileOverlay.classList.remove('open');
+    renderAuthState();
+    loadLeaderboard();
+    showToast('Compte supprimé.', 'success');
+  } catch {
+    showToast('Erreur réseau. Réessaie.', 'error');
+  }
+});
+
 /* ---------------------------------------------------------
    8. Restauration de session au chargement
    --------------------------------------------------------- */

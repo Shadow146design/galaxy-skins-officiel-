@@ -275,7 +275,7 @@
 <footer class="site-footer">
   <span class="brand-text small">GALAXY SINKS<sup>™</sup></span>
   <p>© 2026 Galaxy Sinks™ — Tous droits réservés.</p>
-  <p class="footer-legal">Responsable : INSANE · SIREN en cours · galaxy.sinks8@gmail.com</p>
+  <p class="footer-legal">Responsable : INSANE · SIREN en cours · galaxy.sinks8@gmail.com · <a href="/confidentialite">Confidentialité</a></p>
 </footer>
 
 <!-- ============ AUTH MODAL ============ -->
@@ -320,6 +320,10 @@
         </select>
       </label>
       <p class="form-hint">Si tu ne précises pas ton rang, on tente de le récupérer automatiquement sur Rocket League Tracker Network juste après l'inscription. Si ça échoue, tu pourras le définir toi-même.</p>
+      <label class="modal-checkbox">
+        <input type="checkbox" name="consent" required>
+        <span>J'accepte la <a href="/confidentialite" target="_blank" rel="noopener">politique de confidentialité</a></span>
+      </label>
       <p class="form-error" id="registerError"></p>
       <button type="submit" class="btn btn-solid btn-block">Créer mon compte</button>
     </form>
@@ -418,6 +422,8 @@
     </details>
 
     <button class="btn btn-ghost btn-block logout-btn" id="logoutBtn">Se déconnecter</button>
+    <button class="btn btn-ghost btn-block danger-btn" id="deleteAccountBtn" type="button">Supprimer mon compte</button>
+    <p class="form-hint">Voir <a href="/confidentialite">notre politique de confidentialité</a> pour savoir ce que ça supprime.</p>
   </div>
 </div>
 
