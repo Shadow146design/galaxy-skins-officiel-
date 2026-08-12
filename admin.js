@@ -4,8 +4,8 @@
    Galaxy Sinks™ — admin.js
    Nécessite common.js. Contrôle d'accès côté client (l'accès réel
    est appliqué par chaque fonction backend via la session) + les
-   trois panneaux : bandeau match, modération clips, vérification
-   des rôles.
+   panneaux : modération clips, vérification des rôles, gestion des
+   rosters, gestion de la compétition.
    ========================================================= */
 
 function escapeHtml(str) {
@@ -21,43 +21,6 @@ async function checkAdminAccess() {
     if (data.user && data.user.isAdmin) return true;
   } catch { /* ignore */ }
   return false;
-}
-
-/* ---------------------------------------------------------
-   Bandeau "match en cours"
-   --------------------------------------------------------- */
-async function initLiveMatchPanel() {
-  try {
-    const res = await fetch('/api/live-match');
-    const data = await res.json();
-    $('#liveMatchIsLive').checked = Boolean(data.isLive);
-    $('#liveMatchOpponent').value = data.opponent || '';
-    $('#liveMatchStreamUrl').value = data.streamUrl || '';
-    $('#liveMatchNote').value = data.note || '';
-  } catch { /* ignore */ }
-
-  $('#liveMatchForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const errEl = $('#liveMatchError');
-    errEl.textContent = '';
-    try {
-      const res = await fetch('/api/live-match', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          isLive: $('#liveMatchIsLive').checked,
-          opponent: $('#liveMatchOpponent').value,
-          streamUrl: $('#liveMatchStreamUrl').value,
-          note: $('#liveMatchNote').value,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) { errEl.textContent = data.error || 'Erreur.'; return; }
-      if (window.showToast) window.showToast('Bandeau mis à jour.', 'success');
-    } catch {
-      errEl.textContent = 'Erreur réseau. Réessaie.';
-    }
-  });
 }
 
 /* ---------------------------------------------------------
@@ -471,7 +434,6 @@ $('#saveCompetitionBtn').addEventListener('click', async () => {
     return;
   }
   $('#adminContent').classList.remove('hidden');
-  initLiveMatchPanel();
   loadAdminClips();
   loadAdminRoles();
   loadAdminRoster();

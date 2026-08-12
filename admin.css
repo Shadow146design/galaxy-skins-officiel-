@@ -41,34 +41,6 @@
 .admin-panel-sub { color: var(--text-muted); font-size: 13.5px; margin: 0 0 18px; }
 .admin-empty { color: var(--text-muted); font-size: 13.5px; }
 
-.admin-form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin-top: 14px;
-}
-.admin-form label { font-size: 12.5px; color: var(--text-muted); display: flex; flex-direction: column; gap: 6px; }
-.admin-form input {
-  background: var(--void);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 10px 12px;
-  color: var(--text);
-  font-size: 14px;
-  font-family: var(--font-body);
-}
-.admin-checkbox {
-  grid-column: 1 / -1;
-  flex-direction: row !important;
-  align-items: center;
-  gap: 10px !important;
-  font-size: 13.5px;
-  color: var(--text);
-}
-.admin-checkbox input { width: 18px; height: 18px; accent-color: var(--cyan); }
-.admin-form button { grid-column: 1 / -1; justify-self: start; }
-.admin-form .form-error { grid-column: 1 / -1; margin: 0; }
-
 /* ---- Clips à modérer ---- */
 .admin-clips-list { display: flex; flex-direction: column; gap: 14px; }
 .admin-clip-row {
@@ -199,7 +171,6 @@
 }
 
 @media (max-width: 720px) {
-  .admin-form { grid-template-columns: 1fr; }
   .admin-clip-row { grid-template-columns: 1fr; }
   .admin-role-row { grid-template-columns: 1fr 1fr; }
   .admin-clip-row video { width: 100%; height: auto; }
