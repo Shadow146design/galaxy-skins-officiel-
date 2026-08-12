@@ -274,45 +274,49 @@
   .member-table-head, .member-table-row { grid-template-columns: 30px 1.4fr 1fr 70px; }
 }
 
-/* ================= MOTIFS PAR DIVISION (fond du panneau) ================= */
+/* ================= MOTIFS PAR DIVISION (fond du panneau) =================
+   Chaque motif est coloré via --tab-accent (posé en JS depuis la couleur
+   choisie pour la division), avec color-mix() — donc n'importe laquelle des
+   couleurs de la palette (roster-presets.js) hérite automatiquement d'un
+   effet animé assorti, sans avoir besoin d'une classe par couleur. */
 
-.glow-solar {
+.roster-glow-1 {
   background:
-    radial-gradient(circle at 85% 20%, rgba(255,207,92,.28), transparent 45%),
-    conic-gradient(from 0deg at 85% 20%, transparent, rgba(255,207,92,.12), transparent 60%);
-  animation: solarRaysSpin 46s linear infinite;
+    radial-gradient(circle at 85% 20%, color-mix(in srgb, var(--tab-accent, var(--cyan)) 28%, transparent), transparent 45%),
+    conic-gradient(from 0deg at 85% 20%, transparent, color-mix(in srgb, var(--tab-accent, var(--cyan)) 12%, transparent), transparent 60%);
+  animation: rosterGlowSpin 46s linear infinite;
 }
-.glow-nova {
-  background: radial-gradient(circle at 82% 25%, rgba(63,224,255,.32), transparent 45%);
-  animation: novaBurst 7.5s ease-in-out infinite;
+.roster-glow-2 {
+  background: radial-gradient(circle at 82% 25%, color-mix(in srgb, var(--tab-accent, var(--cyan)) 32%, transparent), transparent 45%);
+  animation: rosterGlowBurst 7.5s ease-in-out infinite;
 }
-.glow-vortex {
-  background: conic-gradient(from 0deg at 85% 30%, var(--nebula), transparent 30%, var(--cyan) 55%, transparent 80%, var(--nebula));
+.roster-glow-3 {
+  background: conic-gradient(from 0deg at 85% 30%, var(--tab-accent, var(--nebula)), transparent 35%, color-mix(in srgb, var(--tab-accent, var(--nebula)) 40%, white) 55%, transparent 80%, var(--tab-accent, var(--nebula)));
   filter: blur(30px);
   opacity: .28;
-  animation: vortexSpin 16s linear infinite;
+  animation: rosterGlowVortexSpin 16s linear infinite;
 }
-.glow-nixys {
-  background: radial-gradient(circle at 85% 25%, rgba(140,107,255,.3), transparent 50%);
-  animation: nixysFlicker 5.5s steps(1,end) infinite;
+.roster-glow-4 {
+  background: radial-gradient(circle at 85% 25%, color-mix(in srgb, var(--tab-accent, var(--nebula)) 30%, transparent), transparent 50%);
+  animation: rosterGlowFlicker 5.5s steps(1,end) infinite;
 }
-.glow-alpha {
-  background: radial-gradient(circle at 85% 25%, rgba(255,207,92,.3), transparent 45%);
-  animation: alphaPulse 6.5s ease-in-out infinite;
+.roster-glow-5 {
+  background: radial-gradient(circle at 85% 25%, color-mix(in srgb, var(--tab-accent, var(--gold)) 30%, transparent), transparent 45%);
+  animation: rosterGlowPulse 6.5s ease-in-out infinite;
 }
 
-@keyframes solarRaysSpin { to { transform: rotate(360deg); } }
-@keyframes novaBurst {
+@keyframes rosterGlowSpin { to { transform: rotate(360deg); } }
+@keyframes rosterGlowBurst {
   0%, 78%, 100% { opacity: .3; }
   87% { opacity: .8; }
   93% { opacity: .5; }
 }
-@keyframes vortexSpin { to { transform: rotate(360deg); } }
-@keyframes nixysFlicker {
+@keyframes rosterGlowVortexSpin { to { transform: rotate(360deg); } }
+@keyframes rosterGlowFlicker {
   0%, 91%, 100% { opacity: .3; }
   92% { opacity: .05; }
   93% { opacity: .36; }
   95% { opacity: .1; }
   96% { opacity: .3; }
 }
-@keyframes alphaPulse { 0%, 100% { opacity: .35; } 50% { opacity: .7; } }
+@keyframes rosterGlowPulse { 0%, 100% { opacity: .35; } 50% { opacity: .7; } }

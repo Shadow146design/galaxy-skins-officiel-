@@ -13,6 +13,11 @@ const ROSTER_ACCENTS = [
   { key: 'cyan', label: 'Cyan', css: 'var(--cyan)' },
   { key: 'nebula', label: 'Nébula', css: 'var(--nebula)' },
   { key: 'live', label: 'Rouge', css: 'var(--live)' },
+  { key: 'green', label: 'Vert', css: '#4ade80' },
+  { key: 'orange', label: 'Orange', css: '#ff9f43' },
+  { key: 'pink', label: 'Rose', css: '#ff6bcb' },
+  { key: 'blue', label: 'Bleu', css: '#4fa3ff' },
+  { key: 'teal', label: 'Turquoise', css: '#2dd4bf' },
 ];
 
 const ROSTER_ICON_SVGS = {
@@ -31,7 +36,7 @@ const ROSTER_ICON_OPTIONS = [
   { key: 'triangle', label: 'Triangle' },
 ];
 
-const ROSTER_GLOW_CLASSES = ['glow-solar', 'glow-nova', 'glow-vortex', 'glow-nixys', 'glow-alpha'];
+const ROSTER_GLOW_CLASSES = ['roster-glow-1', 'roster-glow-2', 'roster-glow-3', 'roster-glow-4', 'roster-glow-5'];
 
 function rosterAccentCss(key) {
   const found = ROSTER_ACCENTS.find((a) => a.key === key);

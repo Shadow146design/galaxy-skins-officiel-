@@ -3,7 +3,7 @@
 // ci-dessous ne sert que de valeur par défaut tant qu'aucun admin n'a encore
 // enregistré de roster personnalisé.
 
-export const ROSTER_ACCENTS = ['gold', 'cyan', 'nebula', 'live'];
+export const ROSTER_ACCENTS = ['gold', 'cyan', 'nebula', 'live', 'green', 'orange', 'pink', 'blue', 'teal'];
 export const ROSTER_ICONS = ['star', 'orbit', 'spiral', 'hexagon', 'triangle'];
 
 const DEFAULT_DIVISIONS = [
