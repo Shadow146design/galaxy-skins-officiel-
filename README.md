@@ -10,49 +10,56 @@ serveur d'origine n'était plus déployé (toutes les routes `/api/*` renvoyaien
 
 - Frontend : HTML/CSS/JS statique (aucun framework), identique aux fichiers servis
   par le site d'origine.
-- Backend : [Netlify Functions](https://docs.netlify.com/functions/overview/)
-  (format v2, `export default async (req) => ...`).
-- Stockage : [Netlify Blobs](https://docs.netlify.com/blobs/overview/) — aucune
-  base de données externe à provisionner.
+- Backend : serveur Node/Express (`server.js`) qui sert les fichiers statiques et
+  adapte les handlers `netlify/functions/*.js` (format `export default async (req)
+  => Response`, API Fetch standard) en routes Express — le code métier de chaque
+  fonction n'a pas été réécrit, seule la couche de transport a changé.
+- Stockage : [Upstash Redis](https://upstash.com) (plan gratuit) via
+  `netlify/lib/blobs.js`, qui expose la même interface `getStore()` que Netlify
+  Blobs (get/set/delete/list/getWithMetadata) — remplacement direct.
+
+> Ce projet a été migré de Netlify vers Render. Les fichiers `netlify.toml` et le
+> dossier `netlify/functions` restent au même endroit (le code métier n'a pas
+> bougé), mais le routage `/api/*` et le stockage sont maintenant assurés par
+> `server.js` + Upstash Redis plutôt que par Netlify Functions/Blobs.
 
 ## Démarrage
 
-`npm install` n'installe que la petite dépendance `@netlify/blobs` — le CLI Netlify
-n'est **pas** requis en dépendance locale : Netlify installe lui-même les paquets
-sur ses serveurs au moment du déploiement.
-
-### Option A — déployer directement (recommandé si peu d'espace disque local)
-
-Sur [app.netlify.com](https://app.netlify.com) :
-- **Glisser-déposer** ce dossier (bouton "Deploy manually"), ou
-- **Connecter un repo Git** (push ce dossier sur GitHub/GitLab, puis "Import an
-  existing project" sur Netlify)
-
-Dans les deux cas, Netlify build et exécute `npm install` de son côté — rien à
-installer sur ta machine.
-
-### Option B — tester en local avec `netlify dev`
-
 ```bash
 npm install
-npx netlify-cli link   # ou: npx netlify-cli init, pour lier ce dossier à ton site Netlify
-npx netlify-cli dev    # lance le site + les fonctions en local sur http://localhost:8888
+npm start   # lance le site + l'API sur http://localhost:3000 (PORT en variable d'env)
 ```
 
-`npx netlify-cli` télécharge le CLI à la volée sans l'ajouter en dépendance
-permanente au projet (utile si l'espace disque local est limité). `netlify dev`
-émule Netlify Blobs localement, donc les comptes créés en local sont utilisables
-sans configuration supplémentaire.
+Sans les variables d'environnement ci-dessous, le serveur démarre normalement et
+sert le site statique ; seules les routes `/api/*` qui en dépendent renverront une
+erreur explicite (ex. `UPSTASH_REDIS_REST_URL / UPSTASH_REDIS_REST_TOKEN
+manquants`) tant qu'elles ne sont pas configurées.
 
-## Variables d'environnement à configurer sur Netlify
+## Déployer sur Render
 
-À définir dans **Site settings → Environment variables** (ou `netlify env:set`) :
+1. Sur [render.com](https://render.com) → **New → Web Service**, connecte ce repo Git.
+2. **Build command** : `npm install` — **Start command** : `npm start`.
+3. Renseigne les variables d'environnement ci-dessous dans **Environment**.
+4. Une fois déployé, Render fournit une URL du type `https://<ton-service>.onrender.com`.
+
+### Provisionner Upstash Redis (stockage — obligatoire)
+
+1. Crée un compte gratuit sur [upstash.com](https://upstash.com) (pas de CB requise).
+2. **Redis → Create Database** (type *Regional*, région proche de ton service Render).
+3. Dans l'onglet **REST API** de la base, copie `UPSTASH_REDIS_REST_URL` et
+   `UPSTASH_REDIS_REST_TOKEN` dans les variables d'environnement Render.
+
+## Variables d'environnement à configurer sur Render
+
+À définir dans **Environment** sur le dashboard Render :
 
 | Variable | Obligatoire | Rôle |
 |---|---|---|
+| `UPSTASH_REDIS_REST_URL` | Oui | URL REST de la base Upstash Redis (voir ci-dessus). |
+| `UPSTASH_REDIS_REST_TOKEN` | Oui | Jeton REST de la base Upstash Redis. |
 | `DISCORD_CLIENT_ID` | Pour la connexion Discord | ID de ton application Discord |
 | `DISCORD_CLIENT_SECRET` | Pour la connexion Discord | Secret de ton application Discord |
-| `DISCORD_REDIRECT_URI` | Optionnel | Par défaut `https://<ton-site>.netlify.app/api/auth/discord/callback`. À renseigner uniquement si tu utilises un domaine personnalisé. |
+| `DISCORD_REDIRECT_URI` | Optionnel | Par défaut `https://<ton-service>.onrender.com/api/auth/discord/callback`. À renseigner uniquement si tu utilises un domaine personnalisé. |
 | `TRACKER_GG_API_KEY` | Optionnel | Clé d'API [tracker.gg](https://tracker.gg/developers) pour fiabiliser la récupération automatique des rangs (voir limite ci-dessous). |
 | `DISCORD_APPLICATIONS_WEBHOOK` | Optionnel | Webhook Discord pour recevoir les candidatures (`/rejoindre`) directement dans un salon. |
 | `ADMIN_TOKEN` | Optionnel | Jeton secret pour basculer le bandeau "match en cours" (voir plus bas). |
@@ -61,9 +68,14 @@ sans configuration supplémentaire.
 
 1. Crée une application sur https://discord.com/developers/applications
 2. Dans **OAuth2 → General**, ajoute comme *Redirect* :
-   `https://<ton-site>.netlify.app/api/auth/discord/callback`
+   `https://<ton-service>.onrender.com/api/auth/discord/callback`
+   (remplace l'ancienne redirect `.netlify.app` si le site a déjà été utilisé sur Netlify)
 3. Copie le **Client ID** et le **Client Secret** dans les variables d'environnement
    ci-dessus.
+
+> Le plan gratuit Render met le service en veille après 15 min d'inactivité (le
+> premier chargement après une veille prend quelques secondes de plus le temps
+> que l'instance redémarre) — comportement normal, pas un bug.
 
 ## Limite connue : récupération automatique des rangs
 
@@ -103,21 +115,21 @@ curl -X POST https://<ton-site>.netlify.app/api/live-match \
 ## Photo de profil
 
 Redimensionnée et recadrée en carré côté client (canvas, 256×256) avant l'envoi,
-puis stockée dans Netlify Blobs (store `avatars`) et servie via `/api/avatar?id=...`.
+puis stockée dans Upstash Redis (store `avatars`) et servie via `/api/avatar?id=...`.
 Formats acceptés : PNG, JPEG, WebP — 2 Mo max après redimensionnement.
 
 ## Clips soumis par les membres
 
-Upload de fichier vidéo réel (pas de lien externe), stocké dans Netlify Blobs
+Upload de fichier vidéo réel (pas de lien externe), stocké dans Upstash Redis
 (store `clips-video`) et modéré avant publication (`clips-meta`, statut
 `pending`/`approved`/`rejected`).
 
-**Limite importante** : les fonctions Netlify plafonnent le corps de requête à
-6 Mo. En tenant compte du surcoût du base64 (~33 %), la vidéo décodée est donc
-limitée à **4 Mo** côté serveur (`netlify/functions/clips-submit.js`) — adapté à
-un clip très court (quelques secondes, typiquement une reprise de but), pas à
-une vidéo complète. Si cette limite est trop contraignante en pratique, la
-solution la plus robuste serait de passer à une soumission par lien externe
+**Limite importante** : le corps de requête est limité à **4 Mo** de vidéo décodée
+côté serveur (`netlify/functions/clips-submit.js`, en tenant compte du surcoût du
+base64) — adapté à un clip très court (quelques secondes, typiquement une reprise
+de but), pas à une vidéo complète. Testé jusqu'à 4 Mo sans problème sur le plan
+gratuit Upstash. Si cette limite est trop contraignante en pratique, la solution
+la plus robuste serait de passer à une soumission par lien externe
 (YouTube/Twitch/Discord) plutôt que par upload direct.
 
 ## Structure du projet
@@ -127,9 +139,10 @@ index.html, roster.html, competition.html, boutique.html,
 clips.html, rejoindre.html, histoire.html, membre.html   → pages (copies exactes)
 style.css, interactions.css, pages.css, ...               → styles (copies exactes)
 common.js, script.js, roster.js, boutique.js, ...          → scripts client (copies exactes)
-netlify/functions/                                         → API backend (reconstruite)
-netlify/lib/                                                → logique partagée (sessions, rangs, blobs...)
-netlify.toml                                                → mapping /api/* → fonctions
+server.js                                                   → serveur Express (statique + adaptateur API)
+netlify/functions/                                          → logique métier des endpoints (inchangée)
+netlify/lib/                                                → logique partagée (sessions, rangs, stockage Redis...)
+netlify.toml                                                → conservé pour référence, plus utilisé par Render
 ```
 
 ## Ce qui est identique vs. reconstruit
