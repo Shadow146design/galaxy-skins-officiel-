@@ -335,6 +335,22 @@ function openProfileModal() {
   $('#epicMissing').classList.toggle('show', !currentUser.epicUsername);
   $('#roleSelect').value = currentUser.role || 'Non défini';
 
+  // Modérateur/Admin/Créateur ne sont attribuables que par le staff : si le
+  // membre a déjà l'un de ces postes, on l'affiche en lecture seule plutôt
+  // que de le laisser cliquer "Valider" et se rétrograder par erreur.
+  const staffRoleSelect = $('#staffRoleSelect');
+  const restrictedStaffRole = ['Modérateur', 'Admin', 'Créateur'].includes(currentUser.staffRole);
+  staffRoleSelect.querySelectorAll('option[data-restricted]').forEach((o) => o.remove());
+  if (restrictedStaffRole) {
+    const opt = document.createElement('option');
+    opt.textContent = currentUser.staffRole;
+    opt.dataset.restricted = 'true';
+    staffRoleSelect.prepend(opt);
+  }
+  staffRoleSelect.value = currentUser.staffRole || 'Membre';
+  staffRoleSelect.disabled = restrictedStaffRole;
+  $('#saveStaffRoleBtn').disabled = restrictedStaffRole;
+
   profileOverlay.classList.add('open');
 }
 $('#profileModalClose').addEventListener('click', () => profileOverlay.classList.remove('open'));
@@ -414,6 +430,22 @@ $('#saveRoleBtn').addEventListener('click', async () => {
     currentUser = data.user;
     renderAuthState();
     showToast('Rôle mis à jour.', 'success');
+  } catch { /* silencieux */ }
+});
+
+$('#saveStaffRoleBtn').addEventListener('click', async () => {
+  try {
+    const res = await fetch('/api/profile/staff-role', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ staffRole: $('#staffRoleSelect').value }),
+    });
+    const data = await res.json();
+    if (!res.ok) { showToast(data.error || 'Erreur.', 'error'); return; }
+    currentUser = data.user;
+    renderAuthState();
+    loadLeaderboard();
+    showToast('Poste mis à jour.', 'success');
   } catch { /* silencieux */ }
 });
 
