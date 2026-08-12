@@ -84,6 +84,20 @@
       </div>
     </section>
 
+    <!-- ============ GESTION DES ROSTERS ============ -->
+    <section class="admin-panel">
+      <h2 class="admin-panel-title">Gestion des rosters</h2>
+      <p class="admin-panel-sub">Ajoute, modifie ou supprime les divisions affichées sur la page Roster.</p>
+      <div id="adminRosterList" class="admin-roster-list">
+        <p class="admin-empty">Chargement…</p>
+      </div>
+      <div class="admin-roster-actions">
+        <button type="button" class="btn btn-ghost" id="addRosterDivisionBtn">+ Ajouter une division</button>
+        <button type="button" class="btn btn-solid" id="saveRosterBtn">Enregistrer les rosters</button>
+      </div>
+      <p class="form-error" id="rosterError"></p>
+    </section>
+
   </div>
 </main>
 
@@ -94,6 +108,7 @@
 
 <script src="common.js"></script>
 <script src="interactions.js"></script>
+<script src="roster-presets.js"></script>
 <script src="admin.js"></script>
 </body>
 </html>

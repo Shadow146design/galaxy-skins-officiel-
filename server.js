@@ -13,6 +13,8 @@ const MAX_BODY_BYTES = 8 * 1024 * 1024; // marge au-dessus des limites internes 
 
 const ROUTE_TABLE = [
   ['/api/live-match', 'live-match.js'],
+  ['/api/roster', 'roster.js'],
+  ['/api/admin/roster', 'admin-roster.js'],
   ['/api/leaderboard', 'leaderboard.js'],
   ['/api/applications', 'applications.js'],
   ['/api/auth/discord/callback', 'auth-discord-callback.js'],

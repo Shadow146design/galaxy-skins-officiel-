@@ -13,43 +13,11 @@ function escapeHtml(str) {
 }
 
 /* ---------------------------------------------------------
-   Divisions du crew — à éditer directement par le staff.
-   accent : couleur CSS utilisée pour la nav + le panneau.
-   glowClass : motif de fond associé (voir roster.css).
-   icon : petit glyphe SVG représentant la division.
+   Divisions du crew — chargées depuis /api/roster (gérées par le
+   staff via le panel admin, voir admin.js). accentKey/iconKey sont
+   résolus en couleur CSS / SVG via roster-presets.js.
    --------------------------------------------------------- */
-const DIVISIONS = [
-  {
-    key: 'solar', name: 'SOLAR DIVISION', accent: 'var(--gold)', glowClass: 'glow-solar',
-    players: ['Frizann', 'Itchy'],
-    managerLabel: 'Manageur', managerName: 'M8 Nours',
-    icon: '<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/>',
-  },
-  {
-    key: 'nova', name: 'NOVA DIVISION', accent: 'var(--cyan)', glowClass: 'glow-nova',
-    players: ['Mr Ninii', 'Filou', 'Karnage'],
-    managerLabel: 'Manageuse', managerName: 'Chelii coco',
-    icon: '<path d="M12 2l2.2 6.8L21 11l-6.8 2.2L12 20l-2.2-6.8L3 11l6.8-2.2z" fill="currentColor"/>',
-  },
-  {
-    key: 'vortex', name: 'VORTEX DIVISION', accent: 'var(--nebula)', glowClass: 'glow-vortex',
-    players: ['Tagz_jojode', 'Tazg_Kaiser', 'Panda_off', 'Nayrox'],
-    managerLabel: 'Manageuse', managerName: 'Chelii coco',
-    icon: '<path d="M12 3a9 9 0 106.4 2.6" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/><path d="M12 7a5 5 0 103.5 1.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>',
-  },
-  {
-    key: 'nixys', name: 'NIXYS DIVISION', accent: 'var(--nebula)', glowClass: 'glow-nixys',
-    players: ['Fries', 'Pistache', 'Maek'],
-    managerLabel: 'Manageuse', managerName: 'Chelii coco',
-    icon: '<polygon points="12,2 20,7 20,17 12,22 4,17 4,7" fill="none" stroke="currentColor" stroke-width="1.6"/>',
-  },
-  {
-    key: 'alpha', name: 'ALPHA DIVISION', accent: 'var(--gold)', glowClass: 'glow-alpha',
-    players: ['Mimi', 'Dark_angel', 'crystal'],
-    managerLabel: null, managerName: null,
-    icon: '<polygon points="12,3 21,20 3,20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
-  },
-];
+let DIVISIONS = [];
 
 const divisionNav = $('#divisionNav');
 const showcaseContent = $('#showcaseContent');
@@ -58,8 +26,8 @@ const showcase = $('#divisionShowcase');
 
 function renderNav() {
   divisionNav.innerHTML = DIVISIONS.map((d, i) => `
-    <button class="division-tab${i === 0 ? ' active' : ''}" data-key="${d.key}" style="--tab-accent:${d.accent}">
-      <span class="division-tab-icon"><svg viewBox="0 0 24 24">${d.icon}</svg></span>
+    <button class="division-tab${i === 0 ? ' active' : ''}" data-key="${d.key}" style="--tab-accent:${rosterAccentCss(d.accentKey)}">
+      <span class="division-tab-icon"><svg viewBox="0 0 24 24">${rosterIconSvg(d.iconKey)}</svg></span>
       <span>${escapeHtml(d.name)}</span>
     </button>
   `).join('');
@@ -70,15 +38,16 @@ function renderNav() {
 }
 
 function selectDivision(key) {
-  const division = DIVISIONS.find((d) => d.key === key);
+  const index = DIVISIONS.findIndex((d) => d.key === key);
+  const division = DIVISIONS[index];
   if (!division) return;
 
   divisionNav.querySelectorAll('.division-tab').forEach((tab) => {
     tab.classList.toggle('active', tab.dataset.key === key);
   });
 
-  showcase.style.setProperty('--tab-accent', division.accent);
-  showcaseGlow.className = 'showcase-glow visible ' + division.glowClass;
+  showcase.style.setProperty('--tab-accent', rosterAccentCss(division.accentKey));
+  showcaseGlow.className = 'showcase-glow visible ' + rosterGlowClass(index);
 
   showcaseContent.innerHTML = `
     <p class="showcase-eyebrow">Division</p>
@@ -97,8 +66,23 @@ function selectDivision(key) {
   `;
 }
 
-renderNav();
-selectDivision(DIVISIONS[0].key);
+async function loadDivisions() {
+  try {
+    const res = await fetch('/api/roster');
+    const data = await res.json();
+    DIVISIONS = data.divisions || [];
+  } catch {
+    DIVISIONS = [];
+  }
+  if (DIVISIONS.length === 0) {
+    divisionNav.innerHTML = '';
+    showcaseContent.innerHTML = '<p class="showcase-eyebrow">Aucune division pour le moment.</p>';
+    return;
+  }
+  renderNav();
+  selectDivision(DIVISIONS[0].key);
+}
+loadDivisions();
 
 /* ---------------------------------------------------------
    Membres inscrits — tableau basé sur le classement réel,

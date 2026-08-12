@@ -132,9 +132,35 @@
 .admin-row-checkbox input { width: 16px; height: 16px; accent-color: var(--cyan); }
 .admin-row-checkbox input:disabled { opacity: .5; cursor: not-allowed; }
 
+/* ---- Gestion des rosters ---- */
+.admin-roster-list { display: flex; flex-direction: column; gap: 14px; }
+.admin-roster-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.admin-roster-row-top { display: grid; grid-template-columns: 1.4fr 1fr 1fr auto; gap: 10px; align-items: center; }
+.admin-roster-row input, .admin-roster-row select, .admin-roster-row textarea {
+  background: var(--void);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
+  color: var(--text);
+  font-size: 13px;
+  font-family: var(--font-body);
+  width: 100%;
+}
+.admin-roster-row textarea { resize: vertical; }
+.admin-roster-delete-btn { padding: 8px 12px; color: var(--live); border-color: var(--live); }
+.admin-roster-actions { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+
 @media (max-width: 720px) {
   .admin-form { grid-template-columns: 1fr; }
   .admin-clip-row { grid-template-columns: 1fr; }
   .admin-role-row { grid-template-columns: 1fr 1fr; }
   .admin-clip-row video { width: 100%; height: auto; }
+  .admin-roster-row-top { grid-template-columns: 1fr; }
 }

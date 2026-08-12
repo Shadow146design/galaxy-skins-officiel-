@@ -16,6 +16,16 @@
   status = 200
 
 [[redirects]]
+  from = "/api/roster"
+  to = "/.netlify/functions/roster"
+  status = 200
+
+[[redirects]]
+  from = "/api/admin/roster"
+  to = "/.netlify/functions/admin-roster"
+  status = 200
+
+[[redirects]]
   from = "/api/applications"
   to = "/.netlify/functions/applications"
   status = 200

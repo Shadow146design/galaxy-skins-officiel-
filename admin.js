@@ -229,6 +229,95 @@ async function loadAdminRoles() {
   }
 }
 
+/* ---------------------------------------------------------
+   Gestion des rosters (divisions du crew)
+   --------------------------------------------------------- */
+let rosterDraft = [];
+
+function readRosterDraftFromDom() {
+  const rows = $('#adminRosterList').querySelectorAll('.admin-roster-row');
+  rosterDraft = Array.from(rows).map((row) => ({
+    key: row.dataset.key || '',
+    name: row.querySelector('.roster-name-input').value,
+    accentKey: row.querySelector('.roster-accent-select').value,
+    iconKey: row.querySelector('.roster-icon-select').value,
+    managerName: row.querySelector('.roster-manager-input').value,
+    players: row.querySelector('.roster-players-textarea').value
+      .split('\n').map((p) => p.trim()).filter(Boolean),
+  }));
+}
+
+function renderRosterEditor() {
+  const list = $('#adminRosterList');
+  if (rosterDraft.length === 0) {
+    list.innerHTML = '<p class="admin-empty">Aucune division. Clique sur « + Ajouter une division ».</p>';
+    return;
+  }
+  list.innerHTML = rosterDraft.map((d, i) => `
+    <div class="admin-roster-row" data-key="${escapeHtml(d.key || '')}" data-index="${i}">
+      <div class="admin-roster-row-top">
+        <input type="text" class="roster-name-input" placeholder="Nom de la division" value="${escapeHtml(d.name || '')}">
+        <select class="roster-accent-select">
+          ${ROSTER_ACCENTS.map((a) => `<option value="${a.key}" ${d.accentKey === a.key ? 'selected' : ''}>${a.label}</option>`).join('')}
+        </select>
+        <select class="roster-icon-select">
+          ${ROSTER_ICON_OPTIONS.map((o) => `<option value="${o.key}" ${d.iconKey === o.key ? 'selected' : ''}>${o.label}</option>`).join('')}
+        </select>
+        <button type="button" class="btn btn-ghost admin-roster-delete-btn" title="Supprimer cette division">✕</button>
+      </div>
+      <input type="text" class="roster-manager-input" placeholder="Manageur (optionnel)" value="${escapeHtml(d.managerName || '')}">
+      <textarea class="roster-players-textarea" placeholder="Un joueur par ligne" rows="3">${escapeHtml((d.players || []).join('\n'))}</textarea>
+    </div>
+  `).join('');
+
+  list.querySelectorAll('.admin-roster-delete-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      readRosterDraftFromDom();
+      const index = Number(btn.closest('.admin-roster-row').dataset.index);
+      rosterDraft.splice(index, 1);
+      renderRosterEditor();
+    });
+  });
+}
+
+async function loadAdminRoster() {
+  const list = $('#adminRosterList');
+  try {
+    const res = await fetch('/api/roster');
+    const data = await res.json();
+    rosterDraft = data.divisions || [];
+    renderRosterEditor();
+  } catch {
+    list.innerHTML = '<p class="admin-empty">Erreur de chargement.</p>';
+  }
+}
+
+$('#addRosterDivisionBtn').addEventListener('click', () => {
+  readRosterDraftFromDom();
+  rosterDraft.push({ key: '', name: '', accentKey: 'cyan', iconKey: 'star', managerName: '', players: [] });
+  renderRosterEditor();
+});
+
+$('#saveRosterBtn').addEventListener('click', async () => {
+  readRosterDraftFromDom();
+  const errEl = $('#rosterError');
+  errEl.textContent = '';
+  try {
+    const res = await fetch('/api/admin/roster', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ divisions: rosterDraft }),
+    });
+    const data = await res.json();
+    if (!res.ok) { errEl.textContent = data.error || 'Erreur.'; return; }
+    rosterDraft = data.divisions;
+    renderRosterEditor();
+    if (window.showToast) window.showToast('Rosters enregistrés.', 'success');
+  } catch {
+    errEl.textContent = 'Erreur réseau. Réessaie.';
+  }
+});
+
 (async function init() {
   const isAdmin = await checkAdminAccess();
   if (!isAdmin) {
@@ -239,4 +328,5 @@ async function loadAdminRoles() {
   initLiveMatchPanel();
   loadAdminClips();
   loadAdminRoles();
+  loadAdminRoster();
 })();
