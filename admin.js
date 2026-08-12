@@ -127,6 +127,7 @@ async function loadAdminRoles() {
       return;
     }
     const ROLE_OPTIONS = ['Non défini', 'Attaquant', 'Défenseur', 'Flex / Polyvalent'];
+    const STAFF_ROLE_OPTIONS = ['Membre', 'Recruteur', 'Coach', 'Manageur', 'Modérateur', 'Cyber Sécurité', 'Staff', 'Admin', 'Créateur'];
 
     list.innerHTML = members.map((u) => `
       <div class="admin-role-row" data-id="${u.id}">
@@ -138,6 +139,9 @@ async function loadAdminRoles() {
           <input type="checkbox" class="admin-role-verified-checkbox" ${u.roleVerified ? 'checked' : ''}>
           Vérifié
         </label>
+        <select class="admin-staff-role-select" title="Poste dans l'organisation">
+          ${STAFF_ROLE_OPTIONS.map((r) => `<option ${(u.staffRole || 'Membre') === r ? 'selected' : ''}>${r}</option>`).join('')}
+        </select>
         <label class="admin-row-checkbox" ${u.isAdminHardcoded ? 'title="Admin par défaut (compte fondateur), non modifiable ici"' : ''}>
           <input type="checkbox" class="admin-is-admin-checkbox" ${u.isAdmin ? 'checked' : ''} ${u.isAdminHardcoded ? 'disabled' : ''}>
           Admin
@@ -159,6 +163,24 @@ async function loadAdminRoles() {
           if (window.showToast) window.showToast('Rôle mis à jour.', 'success');
           const verifiedCb = select.closest('.admin-role-row').querySelector('.admin-role-verified-checkbox');
           if (verifiedCb) verifiedCb.checked = true; // le backend marque aussi vérifié
+        } catch {
+          if (window.showToast) window.showToast('Erreur réseau.', 'error');
+        }
+      });
+    });
+
+    list.querySelectorAll('.admin-staff-role-select').forEach((select) => {
+      select.addEventListener('change', async () => {
+        const userId = select.closest('.admin-role-row').dataset.id;
+        try {
+          const res = await fetch('/api/admin/set-staff-role', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId, staffRole: select.value }),
+          });
+          const data = await res.json();
+          if (!res.ok) { if (window.showToast) window.showToast(data.error || 'Erreur.', 'error'); return; }
+          if (window.showToast) window.showToast('Poste mis à jour.', 'success');
         } catch {
           if (window.showToast) window.showToast('Erreur réseau.', 'error');
         }

@@ -5,7 +5,7 @@ const TIERS = [
   { name: 'Platine', color: '#4fd1c5' },
   { name: 'Diamant', color: '#5b8def' },
   { name: 'Champion', color: '#8c6bff' },
-  { name: 'Champion Elite', color: '#ff8c5c' },
+  { name: 'Grand Champion', color: '#ff8c5c' },
 ];
 const DIVISIONS = ['I', 'II', 'III'];
 

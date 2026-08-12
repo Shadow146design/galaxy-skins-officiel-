@@ -30,6 +30,7 @@ export async function computeLeaderboard() {
       rankLabel: meta.label,
       role: u.role || 'Non défini',
       roleVerified: Boolean(u.roleVerified),
+      staffRole: u.staffRole || 'Membre',
       position: i + 1,
       avatarUrl: u.avatarUpdatedAt ? `/api/avatar?id=${u.id}&v=${u.avatarUpdatedAt}` : null,
       isAdmin: isAdminUser(u),

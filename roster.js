@@ -123,7 +123,10 @@ function renderMemberTable(list) {
         }</span>
         ${escapeHtml(u.username)}
       </span>
-      <span class="member-role-cell">${escapeHtml(u.role || 'Non défini')}${u.roleVerified ? ' <span class="role-verified-badge" title="Rôle vérifié par le staff">✓</span>' : ''}</span>
+      <span class="member-role-cell">
+        ${u.staffRole && u.staffRole !== 'Membre' ? `<span class="badge badge-staff-role">${escapeHtml(u.staffRole)}</span> ` : ''}
+        ${escapeHtml(u.role || 'Non défini')}${u.roleVerified ? ' <span class="role-verified-badge" title="Rôle vérifié par le staff">✓</span>' : ''}
+      </span>
       <span class="rank-chip" style="color:${u.rankColor}">${escapeHtml(u.rankLabel)}</span>
       <a class="member-tracker-link" href="https://rocketleague.tracker.network/rocket-league/profile/epic/${encodeURIComponent(u.epicUsername)}/overview" target="_blank" rel="noopener">Tracker →</a>
     </div>

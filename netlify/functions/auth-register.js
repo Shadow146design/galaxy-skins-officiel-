@@ -46,6 +46,7 @@ export default async (req) => {
     rankKey: 'unranked',
     rankSource: 'none',
     role: 'Non défini',
+    staffRole: 'Membre',
     badges: [],
     createdAt: Date.now(),
   };

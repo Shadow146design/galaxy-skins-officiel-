@@ -114,3 +114,8 @@
   from = "/api/admin/set-admin"
   to = "/.netlify/functions/admin-set-admin"
   status = 200
+
+[[redirects]]
+  from = "/api/admin/set-staff-role"
+  to = "/.netlify/functions/admin-set-staff-role"
+  status = 200

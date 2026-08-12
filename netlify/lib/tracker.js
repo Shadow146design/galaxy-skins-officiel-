@@ -48,7 +48,7 @@ const TIER_SLUG = {
   platinum: 'platine',
   diamond: 'diamant',
   champion: 'champion',
-  'grand champion': 'championelite',
+  'grand champion': 'grandchampion',
   'supersonic legend': 'ssl',
 };
 

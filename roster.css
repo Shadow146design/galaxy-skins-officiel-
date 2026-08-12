@@ -263,6 +263,7 @@
 .member-mini-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .member-role-cell { color: var(--text-muted); }
 .role-verified-badge { color: var(--cyan); font-weight: 800; }
+.badge-staff-role { color: var(--nebula); border-color: var(--nebula); margin-right: 4px; }
 .member-tracker-link { font-size: 12px; font-weight: 700; color: var(--nebula); }
 .member-tracker-link:hover { color: var(--cyan); }
 

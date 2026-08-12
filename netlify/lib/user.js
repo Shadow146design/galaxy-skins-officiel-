@@ -15,6 +15,7 @@ export async function toPublicUser(user) {
     rankSource: user.rankSource || 'none',
     role: user.role || 'Non défini',
     roleVerified: Boolean(user.roleVerified),
+    staffRole: user.staffRole || 'Membre',
     badges: user.badges || [],
     position,
     avatarUrl: user.avatarUpdatedAt ? `/api/avatar?id=${user.id}&v=${user.avatarUpdatedAt}` : null,
