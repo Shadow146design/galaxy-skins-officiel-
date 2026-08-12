@@ -28,6 +28,7 @@ const ROUTE_TABLE = [
   ['/api/auth/epic', 'auth-epic.js'],
   ['/api/profile/role', 'profile-role.js'],
   ['/api/profile/staff-role', 'profile-staff-role.js'],
+  ['/api/notifications/read', 'notifications-read.js'],
   ['/api/profile/avatar', 'profile-avatar.js'],
   ['/api/avatar', 'avatar.js'],
   ['/api/rank/refresh', 'rank-refresh.js'],

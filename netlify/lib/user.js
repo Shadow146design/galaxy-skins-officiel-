@@ -17,6 +17,7 @@ export async function toPublicUser(user) {
     roleVerified: Boolean(user.roleVerified),
     staffRole: user.staffRole || 'Membre',
     badges: user.badges || [],
+    notifications: user.notifications || [],
     position,
     avatarUrl: user.avatarUpdatedAt ? `/api/avatar?id=${user.id}&v=${user.avatarUpdatedAt}` : null,
     isAdmin: isAdminUser(user),

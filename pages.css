@@ -248,6 +248,14 @@
 /* ================= REJOINDRE (candidature) ================= */
 
 .apply-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+.apply-loggedout {
+  grid-column: 1;
+  text-align: center;
+  padding: 40px 24px;
+  background: linear-gradient(160deg, var(--panel), var(--panel-2));
+  border: 1px solid var(--line);
+  border-radius: 18px;
+}
 .apply-form {
   background: linear-gradient(160deg, var(--panel), var(--panel-2));
   border: 1px solid var(--line);

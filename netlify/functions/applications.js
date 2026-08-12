@@ -1,10 +1,16 @@
 import { randomUUID } from 'node:crypto';
 import { applicationsStore } from '../lib/blobs.js';
+import { getSessionUser } from '../lib/session.js';
 import { jsonResponse, errorResponse } from '../lib/response.js';
 import { isValidRankKey } from '../lib/ranks.js';
 
 export default async (req) => {
   if (req.method !== 'POST') return errorResponse('Méthode non autorisée.', 405);
+
+  // Connexion requise pour pouvoir notifier le candidat sur son profil si
+  // sa candidature est acceptée (voir admin-applications.js).
+  const session = await getSessionUser(req);
+  if (!session) return errorResponse('Connecte-toi pour candidater.', 401);
 
   let body;
   try {
@@ -26,6 +32,7 @@ export default async (req) => {
   const id = randomUUID();
   const application = {
     id,
+    userId: session.user.id,
     pseudo,
     epicUsername,
     rankKey,

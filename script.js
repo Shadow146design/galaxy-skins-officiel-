@@ -302,10 +302,14 @@ function renderAuthState() {
     $('#openRegisterBtn').addEventListener('click', () => openAuthModal('register'));
     return;
   }
+  const hasUnread = (currentUser.notifications || []).some((n) => !n.read);
   navAuth.innerHTML = `
     ${currentUser.isAdmin ? `<a class="btn btn-ghost" href="/admin">Admin</a>` : ''}
     <div class="member-pill" id="memberPill">
-      <span class="member-avatar">${avatarInner(currentUser)}</span>
+      <span class="member-avatar-wrap">
+        <span class="member-avatar">${avatarInner(currentUser)}</span>
+        ${hasUnread ? '<span class="member-notif-dot"></span>' : ''}
+      </span>
       <span>${escapeHtml(currentUser.username)}</span>
       <span class="rank-dot" style="background:${currentUser.rankColor}"></span>
     </div>
@@ -313,8 +317,45 @@ function renderAuthState() {
   $('#memberPill').addEventListener('click', openProfileModal);
 }
 
+async function markNotificationRead(id) {
+  try {
+    const res = await fetch('/api/notifications/read', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id }),
+    });
+    const data = await res.json();
+    if (!res.ok) return;
+    currentUser = data.user;
+    renderAuthState();
+    renderProfileNotifications();
+  } catch { /* silencieux */ }
+}
+
+function renderProfileNotifications() {
+  const el = $('#profileNotifications');
+  const notifications = (currentUser.notifications || []).filter((n) => !n.read);
+  if (notifications.length === 0) { el.innerHTML = ''; return; }
+  el.innerHTML = notifications.map((n) => `
+    <div class="profile-notif" data-id="${n.id}">
+      <p>${escapeHtml(n.message)}</p>
+      <div class="profile-notif-actions">
+        ${n.url ? `<a class="btn btn-solid" href="${n.url}" target="_blank" rel="noopener">Rejoindre le Discord</a>` : ''}
+        <button class="btn btn-ghost profile-notif-dismiss" type="button">Marquer comme lu</button>
+      </div>
+    </div>
+  `).join('');
+  el.querySelectorAll('.profile-notif').forEach((card) => {
+    const dismiss = () => markNotificationRead(card.dataset.id);
+    card.querySelector('.profile-notif-dismiss').addEventListener('click', dismiss);
+    const link = card.querySelector('a');
+    if (link) link.addEventListener('click', dismiss);
+  });
+}
+
 function openProfileModal() {
   if (!currentUser) return;
+  renderProfileNotifications();
   $('#profileAvatarPreview').innerHTML = avatarInner(currentUser);
   $('#profileUsername').textContent = currentUser.username;
   $('#profileEpic').textContent = currentUser.epicUsername || '—';
