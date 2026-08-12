@@ -175,7 +175,6 @@ async function loadLeaderboard() {
       const firstSlot = podiumEl.querySelector('.rank-1');
       setTimeout(() => {
         if (window.fireConfetti) window.fireConfetti(firstSlot);
-        if (window.GalaxySinksAudio) window.GalaxySinksAudio.playChime();
       }, 350);
     }
 

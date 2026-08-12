@@ -268,36 +268,6 @@
   }
 }
 
-/* ================= BOUTON AMBIANCE SONORE ================= */
-
-.audio-toggle {
-  position: fixed;
-  bottom: 24px;
-  left: 24px;
-  z-index: 40;
-  width: 46px;
-  height: 46px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  border: 1px solid var(--line);
-  background: rgba(11, 14, 32, .75);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: var(--cyan);
-  cursor: pointer;
-  transition: box-shadow .3s ease, border-color .3s ease, color .3s ease, transform .2s ease;
-}
-.audio-toggle:hover { border-color: var(--cyan); box-shadow: 0 0 20px rgba(63, 224, 255, .5); transform: translateY(-2px); }
-.audio-toggle.is-muted { color: var(--text-muted); }
-.audio-icon { width: 20px; height: 20px; }
-.audio-icon-off { display: none; }
-.audio-toggle.is-muted .audio-icon-on { display: none; }
-.audio-toggle.is-muted .audio-icon-off { display: block; }
-@media (max-width: 640px) {
-  .audio-toggle { width: 40px; height: 40px; bottom: 16px; left: 16px; }
-}
-
 /* ================= TOASTS ================= */
 
 .toast-stack {
